@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nick-deployment
+  namespace: mc-lab
+  labels:
+    user: nick
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: nginx
+  template:
+    metadata:
+      labels:
+        k8s-app: nginx
+    spec:
+      # nodeSelector:
+      #   kubernetes.io/hostname: k8s-haosu-10.sdsc.optiputer.net
+      containers:
+      - name: container
+        image: jerrypiglet/rui_conda_inverse:public
+        args: ["sleep", "infinity"]
+        resources:  
+          requests:
+            cpu: "10"
+            memory: "10Gi"
+            # nvidia.com/gpu: 1
+          limits:
+            cpu: "16"
+            memory: "16Gi"
+            # nvidia.com/gpu: 1
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        - name: openroomsindepthaosu
+          mountPath: /openroomsindept
+        - name: nickdata
+          mountPath: /nickdata
+
+      volumes:
+      - name: nickdata
+        persistentVolumeClaim:
+            claimName: nickdata
+      - name: openroomsindepthaosu
+        persistentVolumeClaim:
+            claimName: openroomsindepthaosu 
+      - name: dshm
+        emptyDir:
+          medium: Memory
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nautilus.io/group
+                operator: In
+                values:
+                - haosu

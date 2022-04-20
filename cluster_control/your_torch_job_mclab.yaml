@@ -1,0 +1,76 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nick-torch-job-gpu
+  # namespace: ucsd-haosulab
+  namespace: "#NAMESPACE"
+  labels:
+    user: nick  # Specify your name
+spec:
+  ttlSecondsAfterFinished: 86400  # Wait one day to delete completed jobs
+  template:
+    spec:
+      # nodeSelector:
+      #   kubernetes.io/hostname: k8s-haosu-04.sdsc.optiputer.net
+      containers:
+      - name: gpu-container-nick
+        image: jerrypiglet/rui_conda_inverse:public
+        imagePullPolicy: IfNotPresent
+        command:
+        - "sh"
+        - "-c"
+        args:
+        - "which python && . /root/miniconda3/etc/profile.d/conda.sh && conda activate /nickdata/envs/py38 && which python && export TORCH_HOME=/nickdata/ && "
+        resources:
+          requests:
+            cpu: "#CPUR" # "20"
+            memory: "#MEMRGi"  #"50Gi"
+            nvidia.com/gpu: '#GPUS'
+          limits:
+            cpu: "#CPUL" #"30"
+            memory: "#MEMLGi" #"100Gi"
+            nvidia.com/gpu: '#GPUS'
+        volumeMounts:
+          - name: dshm
+            mountPath: /dev/shm 
+          - name: nickdata
+            mountPath: /nickdata
+          - name: openroomsindepthaosu
+            mountPath: /openroomsindept
+          - name: ruidatamclab
+            mountPath: /ruidata
+
+      volumes:
+      - name: dshm  # shared memory
+        emptyDir:
+          medium: Memory
+      - name: openroomsindepthaosu
+        persistentVolumeClaim:
+            claimName: openroomsindepthaosu 
+      - name: ruidatamclab
+        persistentVolumeClaim:
+            claimName: ruidatamclab
+      - name: nickdata
+        persistentVolumeClaim:
+            claimName: nickdata
+      restartPolicy: Never
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nautilus.io/group
+                operator: In
+                values:
+                - haosu
+              # - key: nautilus.io/group
+              #   operator: NotIn
+              #   values:
+              #   - k8s-haosu-01.sdsc.optiputer.net
+              # - key: gpu-type
+              #   operator: In
+              #   values:
+              #   # - 1080Ti
+              #   - 2080Ti
+              #   # - TITANRTX
+  backoffLimit: 2
