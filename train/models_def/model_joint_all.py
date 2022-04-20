@@ -192,8 +192,7 @@ class Model_Joint(nn.Module):
 
         input_tensor = torch.cat(input_list, 1)
 
-        #TODO
-        #model = ...
+        model = this.model_type
 
         if model = "li":
             x1, x2, x3, x4, x5, x6, extra_output_dict = self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
