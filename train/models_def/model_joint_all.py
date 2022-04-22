@@ -29,7 +29,7 @@ class Model_Joint(nn.Module):
         if self.cfg.MODEL_BRDF.enable:
             in_channels = 3
             
-            if model_type == "li":
+            if self.model_type == "li":
                 self.encoder_to_use = models_brdf.encoder0
                 self.decoder_to_use = models_brdf.decoder0
 
@@ -68,7 +68,7 @@ class Model_Joint(nn.Module):
                 if self.cfg.MODEL_BRDF.if_freeze:
                     self.BRDF_Net.eval()
             else:
-                if model_type == "mobilenet-large":
+                if self.model_type == "mobilenet-large":
                     self.encoder_to_use = models_mobilenet.MobileNetV3_Large
                     self.decoder_to_use = models_mobilenet.LRASPP
 
@@ -192,9 +192,9 @@ class Model_Joint(nn.Module):
 
         input_tensor = torch.cat(input_list, 1)
 
-        model = this.model_type
+        model = self.model_type
 
-        if model = "li":
+        if model == "li":
             x1, x2, x3, x4, x5, x6, extra_output_dict = self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
 
             return_dict = {'encoder_outputs': {'x1': x1, 'x2': x2, 'x3': x3, 'x4': x4, 'x5': x5, 'x6': x6, 'brdf_extra_output_dict': extra_output_dict}}
