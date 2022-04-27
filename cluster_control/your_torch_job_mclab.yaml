@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: nick-torch-job-gpu
+  name: nityaagarwal-torch-job-gpu
   # namespace: ucsd-haosulab
   namespace: "#NAMESPACE"
   labels:
-    user: nick  # Specify your name
+    user: nityaagarwal  # Specify your name
 spec:
   ttlSecondsAfterFinished: 86400  # Wait one day to delete completed jobs
   template:
@@ -13,14 +13,14 @@ spec:
       # nodeSelector:
       #   kubernetes.io/hostname: k8s-haosu-04.sdsc.optiputer.net
       containers:
-      - name: gpu-container-nick
+      - name: gpu-container-nityaagarwal
         image: jerrypiglet/rui_conda_inverse:public
         imagePullPolicy: IfNotPresent
         command:
         - "sh"
         - "-c"
         args:
-        - "which python && . /root/miniconda3/etc/profile.d/conda.sh && conda activate /nickdata/envs/py38 && which python && export TORCH_HOME=/nickdata/ && "
+        - "which python && . /root/miniconda3/etc/profile.d/conda.sh && conda activate /nityaagarwaldata/envs/py38 && which python && export TORCH_HOME=/nityaagarwaldata/ && "
         resources:
           requests:
             cpu: "#CPUR" # "20"
@@ -33,8 +33,8 @@ spec:
         volumeMounts:
           - name: dshm
             mountPath: /dev/shm 
-          - name: nickdata
-            mountPath: /nickdata
+          - name: nityaagarwaldata
+            mountPath: /nityaagarwaldata
           - name: openroomsindepthaosu
             mountPath: /openroomsindept
           - name: ruidatamclab
@@ -50,9 +50,9 @@ spec:
       - name: ruidatamclab
         persistentVolumeClaim:
             claimName: ruidatamclab
-      - name: nickdata
+      - name: nityaagarwaldata
         persistentVolumeClaim:
-            claimName: nickdata
+            claimName: nityaagarwaldata
       restartPolicy: Never
       affinity:
         nodeAffinity:
