@@ -39,6 +39,8 @@ spec:
           mountPath: /openroomsindept
         - name: nickdata
           mountPath: /nickdata
+        - name: ruidatamclab
+          mountPath: /ruidata
 
       volumes:
       - name: nickdata
@@ -47,6 +49,9 @@ spec:
       - name: openroomsindepthaosu
         persistentVolumeClaim:
             claimName: openroomsindepthaosu 
+      - name: ruidatamclab
+        persistentVolumeClaim:
+            claimName: ruidatamclab
       - name: dshm
         emptyDir:
           medium: Memory
