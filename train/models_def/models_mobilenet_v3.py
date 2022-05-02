@@ -230,7 +230,7 @@ class LRASPP(nn.Module):
         num_layers2 = aspp_out_ch/2
         num_layers3 = aspp_out_ch/4
 
-        print("\n\n\n\n TYPE OF NUM_LAYERS2: " + num_layers2 + " " + num_layers4)
+        print("\n\n\n\n TYPE OF NUM_LAYERS2: " + str(num_layers2) + " " + str(num_layers4))
 
         self.convs2 = nn.Conv2d(s2_ch, 32, kernel_size=1, bias=False)
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
