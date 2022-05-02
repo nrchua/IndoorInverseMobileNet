@@ -263,7 +263,7 @@ class LRASPP(nn.Module):
         y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
 
-        print("\n\n\nCONVUP2")
+        print("\n\n\nCONVUP3")
         print(final.size())
         
         x_orig = y
@@ -296,6 +296,10 @@ class LRASPP(nn.Module):
         y = x_out
         y = F.interpolate(y, size=x_out.shape[2:], mode='bilinear', align_corners=False)
         x_out = y
+
+        print("\n\n\nlast layer:")
+        print(x_out.size())
+        print("\n\n\n")
 
         return_dict.update({'x_out': x_out})
 
