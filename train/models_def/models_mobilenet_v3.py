@@ -281,7 +281,7 @@ class LRASPP(nn.Module):
             x_out = x_orig
         
         y = x_out
-        y = F.interpolate(y, size=x.shape[2:], mode='bilinear', align_corners=False)
+        y = F.interpolate(y, size=xout.shape[2:], mode='bilinear', align_corners=False)
         x_out = y
 
         return_dict.update({'x_out': x_out})
