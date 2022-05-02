@@ -169,7 +169,7 @@ class LRASPP(nn.Module):
         if (mode == 0):
             out_channel_final = 3
         elif (mode == 1):
-            out_channel_final = 1
+            out_channel_final = 3
         elif (mode == 2):
             out_channel_final = 1
         elif (mode == 4):
