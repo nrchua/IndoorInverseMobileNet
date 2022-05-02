@@ -112,7 +112,7 @@ class Model_Joint(nn.Module):
                             self.BRDF_Net.update({'roughDecoder': self.decoder_to_use(opt, mode=2)})
                         
                         if 'de' in self.cfg.MODEL_BRDF.enable_list:
-                            self.BRDF_Net.update({'albedoDecoder': self.decoder_to_use(opt, mode=4)})
+                            self.BRDF_Net.update({'depthDecoder': self.decoder_to_use(opt, mode=4)})
 
                     if self.cfg.MODEL_BRDF.if_freeze:
                         self.BRDF_Net.eval()
