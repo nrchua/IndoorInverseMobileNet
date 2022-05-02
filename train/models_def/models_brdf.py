@@ -300,6 +300,6 @@ class decoder0(nn.Module):
         return_dict.update({'x_out': x_out})
 
         print("\n\n\n\n OUTPUT:")
-        print(x.size())
+        print(x_out.size())
 
         return return_dict
