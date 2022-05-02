@@ -228,9 +228,9 @@ class LRASPP(nn.Module):
 
         self.convs2 = nn.Conv2d(s2_ch, 32, kernel_size=1, bias=False)
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
-        self.conv_up1 = nn.Conv2d(aspp_out_ch, aspp_out_ch/2, kernel_size=1)
-        self.conv_up2 = ConvBnRelu(aspp_out_ch/2, aspp_out_ch/4, kernel_size=1)
-        self.conv_up3 = ConvBnRelu(aspp_out_ch/4, self.out_channel_final,  kernel_size=1)
+        self.conv_up1 = nn.Conv2d(aspp_out_ch, num_filters, kernel_size=1)
+        self.conv_up2 = ConvBnRelu(aspp_out_ch/2, num_filters, kernel_size=1)
+        self.conv_up3 = ConvBnRelu(aspp_out_ch /4, num_filters,  kernel_size=1)
         
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
