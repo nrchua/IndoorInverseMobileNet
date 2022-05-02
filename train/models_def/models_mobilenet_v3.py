@@ -273,6 +273,9 @@ class LRASPP(nn.Module):
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
         
+
+        print("\n\n\nMODE: ")
+        print(mode)
         if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
         elif self.mode == 1: # modality='no'
