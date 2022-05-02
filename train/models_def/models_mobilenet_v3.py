@@ -83,7 +83,7 @@ class MobileNetV3_Large(nn.Module):
         self.block5 = net.blocks[5]
         self.block6 = net.blocks[6]
 
-    def forward(self, x):
+    def forward(self, x, input_dict_extra=None):
         x = self.early(x) # 2x
         x = self.block0(x)
         s2 = x
@@ -94,7 +94,7 @@ class MobileNetV3_Large(nn.Module):
         x = self.block4(x)
         x = self.block5(x)
         x = self.block6(x)
-        return s2, s4, x
+        return s2, s4, x, {}
 
 class MobileNetV3_Small(nn.Module):
     def __init__(self, opt, trunk=tf_mobilenetv3_small_100, pretrained=False):
@@ -133,7 +133,7 @@ class MobileNetV3_Small(nn.Module):
         self.block4 = net.blocks[4]
         self.block5 = net.blocks[5]
 
-    def forward(self, x):
+    def forward(self, x, input_dict_extra=None):
         x = self.early(x) # 2x
         s2 = x
         x = self.block0(x) # 4x
@@ -143,7 +143,7 @@ class MobileNetV3_Small(nn.Module):
         x = self.block3(x)
         x = self.block4(x)
         x = self.block5(x)
-        return s2, s4, x
+        return s2, s4, x, {}
 
 #DECODERS
 class LRASPP(nn.Module):
@@ -159,7 +159,7 @@ class LRASPP(nn.Module):
 
         #self.trunk, s2_ch, s4_ch, high_level_ch = get_trunk(trunk_name=trunk)
         self.use_aspp = use_aspp
-        self.mobilenet_size_large = True
+        self.mobilenet_size_large = False
         self.mode = mode
 
         if (self.mobilenet_size_large):
@@ -218,10 +218,9 @@ class LRASPP(nn.Module):
         
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
-    def forward(self, s2, s4, final):
+    def forward(self, s2, s4, final, input_dict_extra=None):
 
         extra_output_dict = {}
-        
         if self.use_aspp:
             aspp = torch.cat([
                 self.aspp_conv1(final),
@@ -238,6 +237,9 @@ class LRASPP(nn.Module):
             )
         
         y = self.conv_up1(aspp)
+        
+        #y = self.conv_up1(final)
+
         y = F.interpolate(y, size=s4.shape[2:], mode='bilinear', align_corners=False)
         dx1 = y
 

@@ -25,12 +25,12 @@ spec:
         args: ["sleep", "infinity"]
         resources:  
           requests:
-            cpu: "10"
-            memory: "10Gi"
+            cpu: "20"
+            memory: "20Gi"
             # nvidia.com/gpu: 1
           limits:
-            cpu: "16"
-            memory: "16Gi"
+            cpu: "20"
+            memory: "20Gi"
             # nvidia.com/gpu: 1
         volumeMounts:
         - name: dshm

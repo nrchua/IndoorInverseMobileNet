@@ -25,6 +25,7 @@ class Model_Joint(nn.Module):
 
         self.load_brdf_gt = self.opt.cfg.DATA.load_brdf_gt
         self.model_type = self.opt.model
+        #print("\n\n\n\n\n\n\n\n\n\n\n\n\n MODEL TYPE: " + self.model_type + "\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
         if self.cfg.MODEL_BRDF.enable:
             in_channels = 3
@@ -68,6 +69,7 @@ class Model_Joint(nn.Module):
                 if self.cfg.MODEL_BRDF.if_freeze:
                     self.BRDF_Net.eval()
             else:
+                print("\n\n\n\n\n\n\n\n\n\n\n\n\n MODEL TYPE: " + self.model_type + "\n\n\n\n\n\n\n\n\n\n\n\n\n")
                 if self.model_type == "mobilenet-large":
                     self.encoder_to_use = models_mobilenet.MobileNetV3_Large
                     self.decoder_to_use = models_mobilenet.LRASPP
@@ -289,14 +291,17 @@ class Model_Joint(nn.Module):
                             depthBsPred_aligned, depthConf = self.BRDF_Net['depthBs'](input_dict['imBatch'], return_dict['albedoPred'].detach(), depthPred_aligned )
                             return_dict.update({'depthBsPred_aligned': depthBsPred_aligned})
         else:
-            s2, s4, x = self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
+            s2, s4, x , temp= self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
+
+            print("\n\n\n\n\nENCODER OUT SHAPE: " + x.size() + "\n\n\n\n\n\n\n\n")
 
             return_dict = {'encoder_outputs': {'s2': s2, 's4': s4, 'x': x}}
             albedo_output = {}
 
             if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                 if 'al' in self.cfg.MODEL_BRDF.enable_list:
-                    albedo_output = self.BRDF_Net['albedoDecoder'](input_dict['imBatch'], s2, s4, x)
+                    #albedo_output = self.BRDF_Net['albedoDecoder'](input_dict['imBatch'], s2, s4, x)
+                    albedo_output = self.BRDF_Net['albedoDecoder'](s2, s4, x)
                     albedoPred = 0.5 * (albedo_output['x_out'] + 1)
 
                     if if_has_gt_segBRDF:
@@ -312,17 +317,20 @@ class Model_Joint(nn.Module):
                         return_dict.update({'albedoPred_aligned': albedoPred_aligned, 'albedo_extra_output_dict': albedo_output['extra_output_dict']})
 
                 if 'no' in self.cfg.MODEL_BRDF.enable_list:
-                    normal_output = self.BRDF_Net['normalDecoder'](input_dict['imBatch'], s2, s4, x)
+                    #normal_output = self.BRDF_Net['normalDecoder'](input_dict['imBatch'], s2, s4, x)
+                    normal_output = self.BRDF_Net['normalDecoder'](s2, s4, x)
                     normalPred = normal_output['x_out']
                     return_dict.update({'normalPred': normalPred, 'normal_extra_output_dict': normal_output['extra_output_dict']})
 
                 if 'ro' in self.cfg.MODEL_BRDF.enable_list:
-                    rough_output = self.BRDF_Net['roughDecoder'](input_dict['imBatch'], s2, s4, x)
+                    #rough_output = self.BRDF_Net['roughDecoder'](input_dict['imBatch'], s2, s4, x)
+                    rough_output = self.BRDF_Net['roughDecoder'](s2, s4, x)
                     roughPred = rough_output['x_out']
                     return_dict.update({'roughPred': roughPred, 'rough_extra_output_dict': rough_output['extra_output_dict']})
 
                 if 'de' in self.cfg.MODEL_BRDF.enable_list:
-                    depth_output = self.BRDF_Net['depthDecoder'](input_dict['imBatch'], s2, s4, x)
+                    #depth_output = self.BRDF_Net['depthDecoder'](input_dict['imBatch'], s2, s4, x)
+                    depth_output = self.BRDF_Net['depthDecoder'](s2, s4, x)
                     depthPred = depth_output['x_out']
                     return_dict.update({'depthPred': depthPred})
 
