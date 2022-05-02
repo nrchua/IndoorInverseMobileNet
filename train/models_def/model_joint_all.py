@@ -293,7 +293,9 @@ class Model_Joint(nn.Module):
         else:
             s2, s4, x , temp= self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
 
-            print("\n\n\n\n\nENCODER OUT SHAPE: " + x.size() + "\n\n\n\n\n\n\n\n")
+            print("\n\n\n\n\nENCODER OUT SHAPE: ")
+            print(x.size())
+            print("\n\n\n\n\n\n\n\n"))
 
             return_dict = {'encoder_outputs': {'s2': s2, 's4': s4, 'x': x}}
             albedo_output = {}
