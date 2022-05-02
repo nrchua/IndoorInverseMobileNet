@@ -301,7 +301,7 @@ class LRASPP(nn.Module):
             x_out = x_orig
         
         y = x_out
-        y = F.interpolate(y, size=x_out.shape[2:], mode='bilinear', align_corners=False)
+        y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         x_out = y
 
         print("\n\n\nlast layer:")
