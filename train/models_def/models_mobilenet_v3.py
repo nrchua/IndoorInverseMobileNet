@@ -275,7 +275,7 @@ class LRASPP(nn.Module):
         
 
         print("\n\n\nMODE: ")
-        print(int(mode))
+        print(self.mode)
         print("\n\n\n\n")
         if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
