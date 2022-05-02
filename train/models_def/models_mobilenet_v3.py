@@ -230,8 +230,6 @@ class LRASPP(nn.Module):
         num_layers2 = int(aspp_out_ch/2)
         num_layers3 = int(aspp_out_ch/4)
 
-        print("\n\n\n\n TYPE OF NUM_LAYERS2: " + str(num_layers2) + " " + str(num_layers3))
-        print("\n\n\n\n MODE: " + str(self.mode) + " OUT CH:" + str(self.out_channel_final))
 
         self.convs2 = nn.Conv2d(s2_ch, 32, kernel_size=1, bias=False)
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
@@ -242,13 +240,6 @@ class LRASPP(nn.Module):
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
     def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
-
-        print("\n\n\nMODE IN FORWARD BEGINNING: ")
-        print(self.mode)
-        print("\n\n\n\n")
-
-        print("\n\n\nINITIAL:")
-        print(final.size())
 
         extra_output_dict = {}
 
@@ -266,41 +257,25 @@ class LRASPP(nn.Module):
                 mode='bilinear',
                 align_corners=True
             )
-        
-        print("\n\n\nAFTER ASPP:")
-        print(aspp.size())
 
         y = self.conv_up1(aspp)
         y = F.interpolate(y, size=s4.shape[2:], mode='bilinear', align_corners=False)
         dx1 = y
-
-        print("\n\n\nCONVUP1:")
-        print(dx1.size())
 
         y = torch.cat([y, self.convs4(s4)], 1)
         y = self.conv_up2(y)
         y = F.interpolate(y, size=s2.shape[2:], mode='bilinear', align_corners=False)
         dx2 = y
 
-        print("\n\n\nCONVUP2")
-        print(dx2.size())
-
         y = torch.cat([y, self.convs2(s2)], 1)
         y = self.conv_up3(y)
         y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
-
-        print("\n\n\nCONVUP3")
-        print(dx3.size())
         
         x_orig = y
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
-        
-
-        print("\n\n\nMODE IN FORWARD: ")
-        print(self.mode)
-        print("\n\n\n\n")
+    
         if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
         elif self.mode == 1: # modality='no'
@@ -323,11 +298,6 @@ class LRASPP(nn.Module):
         #     x_out = 1. / (x_out + 1e-6) # -> [0, inf]
         else:
             x_out = x_orig
-
-
-        print("\n\n\nlast layer:")
-        print(x_out.size())
-        print("\n\n\n")
 
         return_dict.update({'x_out': x_out})
 
