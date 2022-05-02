@@ -226,6 +226,8 @@ class LRASPP(nn.Module):
             )
             aspp_out_ch = num_filters
         
+
+        print("\n\n\n\n TYPE OF NUM_LAYERS2: " + type(num_layers2))
         num_layers2 = aspp_out_ch/2
         num_layers3 = aspp_out_ch/4
 
