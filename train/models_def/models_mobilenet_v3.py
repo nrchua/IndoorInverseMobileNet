@@ -164,6 +164,7 @@ class LRASPP(nn.Module):
         self.use_aspp = use_aspp
         self.mobilenet_size_large = False
         self.mode = mode
+        self.out_channel_final = 0
 
         if (self.mobilenet_size_large):
             s2_ch = 16
@@ -216,9 +217,9 @@ class LRASPP(nn.Module):
 
         self.convs2 = nn.Conv2d(s2_ch, 32, kernel_size=1, bias=False)
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
-        self.conv_up1 = nn.Conv2d(aspp_out_ch, num_filters, kernel_size=1)
-        self.conv_up2 = ConvBnRelu(num_filters + 64, num_filters, kernel_size=1)
-        self.conv_up3 = ConvBnRelu(num_filters + 32, num_filters, kernel_size=1)
+        self.conv_up1 = nn.Conv2d(aspp_out_ch, aspp_out_ch / 2, kernel_size=1)
+        self.conv_up2 = ConvBnRelu(aspp_out_ch / 2, aspp_out_ch / 4, kernel_size=1)
+        self.conv_up3 = ConvBnRelu(aspp_out_ch / 4, self.out_channel_final,  kernel_size=1)
         
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
@@ -228,6 +229,17 @@ class LRASPP(nn.Module):
         print(final.size())
 
         extra_output_dict = {}
+
+        out_channel_final = 0
+        if (mode == 0):
+            out_channel_final = 3
+        elif (mode == 1):
+            out_channel_final = 1
+        elif (mode == 2):
+            out_channel_final = 1
+        elif (mode == 4):
+            out_channel_final = 3
+
         if self.use_aspp:
             aspp = torch.cat([
                 self.aspp_conv1(final),
