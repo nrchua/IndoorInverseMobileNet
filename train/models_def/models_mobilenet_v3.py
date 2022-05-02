@@ -243,6 +243,10 @@ class LRASPP(nn.Module):
 
     def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
 
+        print("\n\n\nMODE IN FORWARD BEGINNING: ")
+        print(self.mode)
+        print("\n\n\n\n")
+
         print("\n\n\nINITIAL:")
         print(final.size())
 
@@ -294,7 +298,7 @@ class LRASPP(nn.Module):
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
         
 
-        print("\n\n\nMODE: ")
+        print("\n\n\nMODE IN FORWARD: ")
         print(self.mode)
         print("\n\n\n\n")
         if self.mode == 0: # modality='al'
