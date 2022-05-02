@@ -25,8 +25,6 @@ class Model_Joint(nn.Module):
 
         self.load_brdf_gt = self.opt.cfg.DATA.load_brdf_gt
         self.model_type = self.opt.model
-        #print("\n\n\n\n\n\n\n\n\n\n\n\n\n MODEL TYPE: " + self.model_type + "\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        print("\nMODEL TYPE: " + self.model_type)
         if self.cfg.MODEL_BRDF.enable:
             in_channels = 3
             
@@ -317,7 +315,9 @@ class Model_Joint(nn.Module):
                     #normal_output = self.BRDF_Net['normalDecoder'](input_dict['imBatch'], s2, s4, x)
                     normal_output = self.BRDF_Net['normalDecoder'](s2, s4, x, input_tensor, 1)
                     normalPred = normal_output['x_out']
-                    print("\n\n\n\nNORMAL SIZE: "+ normalPred.size())
+                    print("\n\n\n\nNORMAL SIZE: ")
+                    print(normalPred.size())
+                    print("\n\n\n\n\n")
                     return_dict.update({'normalPred': normalPred, 'normal_extra_output_dict': normal_output['extra_output_dict']})
 
                 if 'ro' in self.cfg.MODEL_BRDF.enable_list:

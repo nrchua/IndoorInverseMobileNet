@@ -141,7 +141,7 @@ opt.cfg = cfg
 opt.pwdpath = pwdpath
 opt.if_plotted = False
 
-print("\n\n\n\n\nOPT: " + opt.model + "\n\n\n\n\n\n\n\n")
+print("\n\n\n\n\nMODEL: " + opt.model + "\n\n\n\n\n\n\n\n")
 
 from utils.utils_envs import set_up_dist
 handle = set_up_dist(opt)
