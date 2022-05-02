@@ -204,7 +204,7 @@ class LRASPP(nn.Module):
                 nn.ReLU(inplace=True),
             )
             self.aspp_conv2 = nn.Sequential(
-                nn.AvgPool2d(10)
+                nn.AvgPool2d(kernel_size=(10,10))
                 #nn.AvgPool2d(kernel_size=(49, 49), stride=(16, 20)),
                 nn.Conv2d(high_level_ch, num_filters, 1, bias=False),
                 nn.Sigmoid(),
