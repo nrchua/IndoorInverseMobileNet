@@ -302,6 +302,7 @@ class Model_Joint(nn.Module):
 
             if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                 if 'al' in self.cfg.MODEL_BRDF.enable_list:
+                    print("\n\n\n IN ALBEDO")
                     #albedo_output = self.BRDF_Net['albedoDecoder'](input_dict['imBatch'], s2, s4, x)
                     albedo_output = self.BRDF_Net['albedoDecoder'](s2, s4, x, input_tensor, 0)
                     albedoPred = 0.5 * (albedo_output['x_out'] + 1)
@@ -319,18 +320,21 @@ class Model_Joint(nn.Module):
                         return_dict.update({'albedoPred_aligned': albedoPred_aligned, 'albedo_extra_output_dict': albedo_output['extra_output_dict']})
 
                 if 'no' in self.cfg.MODEL_BRDF.enable_list:
+                    print("\n\n\n IN NORMALS")
                     #normal_output = self.BRDF_Net['normalDecoder'](input_dict['imBatch'], s2, s4, x)
                     normal_output = self.BRDF_Net['normalDecoder'](s2, s4, x, input_tensor, 1)
                     normalPred = normal_output['x_out']
                     return_dict.update({'normalPred': normalPred, 'normal_extra_output_dict': normal_output['extra_output_dict']})
 
                 if 'ro' in self.cfg.MODEL_BRDF.enable_list:
+                    print("\n\n\n IN ROUGHNESS")
                     #rough_output = self.BRDF_Net['roughDecoder'](input_dict['imBatch'], s2, s4, x)
                     rough_output = self.BRDF_Net['roughDecoder'](s2, s4, x, input_tensor, 2)
                     roughPred = rough_output['x_out']
                     return_dict.update({'roughPred': roughPred, 'rough_extra_output_dict': rough_output['extra_output_dict']})
 
                 if 'de' in self.cfg.MODEL_BRDF.enable_list:
+                    print("\n\n\n IN DEPTH")
                     #depth_output = self.BRDF_Net['depthDecoder'](input_dict['imBatch'], s2, s4, x)
                     depth_output = self.BRDF_Net['depthDecoder'](s2, s4, x, input_tensor, 4)
                     depthPred = depth_output['x_out']
