@@ -166,6 +166,8 @@ class LRASPP(nn.Module):
         self.mode = mode
         self.out_channel_final = 0
 
+        print("\n\n\n\n MODE:FROM INIT " + str(self.mode))
+
         if (self.mobilenet_size_large):
             s2_ch = 16
             s4_ch = 24
