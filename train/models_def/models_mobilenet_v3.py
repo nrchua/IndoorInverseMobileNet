@@ -251,7 +251,7 @@ class LRASPP(nn.Module):
         dx1 = y
 
         print("\n\n\nCONVUP1:")
-        print(y.size())
+        print(dx1.size())
 
         y = torch.cat([y, self.convs4(s4)], 1)
         y = self.conv_up2(y)
@@ -259,7 +259,7 @@ class LRASPP(nn.Module):
         dx2 = y
 
         print("\n\n\nCONVUP2")
-        print(final.size())
+        print(dx2.size())
 
         y = torch.cat([y, self.convs2(s2)], 1)
         y = self.conv_up3(y)
@@ -267,7 +267,7 @@ class LRASPP(nn.Module):
         dx3 = y
 
         print("\n\n\nCONVUP3")
-        print(final.size())
+        print(dx3.size())
         
         x_orig = y
 
