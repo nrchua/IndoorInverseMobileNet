@@ -221,6 +221,9 @@ class LRASPP(nn.Module):
 
     def forward(self, s2, s4, final, input_dict_extra=None):
 
+        print("\n\n\nINITIAL:")
+        print(final.size())
+
         extra_output_dict = {}
         if self.use_aspp:
             aspp = torch.cat([
@@ -237,7 +240,13 @@ class LRASPP(nn.Module):
                 align_corners=True
             )
         
+        print("\n\n\nAFTER ASPP:")
+        print(aspp.size())
+
         y = self.conv_up1(aspp)
+
+        print("\n\n\nCONVUP1:")
+        print(y.size())
         
         #y = self.conv_up1(final)
 
@@ -249,11 +258,15 @@ class LRASPP(nn.Module):
         y = F.interpolate(y, size=s2.shape[2:], mode='bilinear', align_corners=False)
         dx2 = y
 
+        print("\n\n\nCONVUP12")
+        print(final.size())
+
         y = torch.cat([y, self.convs2(s2)], 1)
         y = self.conv_up3(y)
+        y = F.interpolate(y, size=final.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
         
-        x_orig = dx3
+        x_orig = y
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
         
