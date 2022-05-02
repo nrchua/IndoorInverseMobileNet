@@ -164,9 +164,18 @@ class LRASPP(nn.Module):
         self.use_aspp = use_aspp
         self.mobilenet_size_large = False
         self.mode = mode
-        self.out_channel_final = 0
 
-        print("\n\n\n\n MODE:FROM INIT " + str(self.mode))
+        out_channel_final = 0
+        if (mode == 0):
+            out_channel_final = 3
+        elif (mode == 1):
+            out_channel_final = 1
+        elif (mode == 2):
+            out_channel_final = 1
+        elif (mode == 4):
+            out_channel_final = 3
+
+        self.out_channel_final = out_channel_final
 
         if (self.mobilenet_size_large):
             s2_ch = 16
@@ -232,16 +241,6 @@ class LRASPP(nn.Module):
 
         extra_output_dict = {}
 
-        out_channel_final = 0
-        if (mode == 0):
-            out_channel_final = 3
-        elif (mode == 1):
-            out_channel_final = 1
-        elif (mode == 2):
-            out_channel_final = 1
-        elif (mode == 4):
-            out_channel_final = 3
-
         if self.use_aspp:
             aspp = torch.cat([
                 self.aspp_conv1(final),
@@ -289,20 +288,20 @@ class LRASPP(nn.Module):
         
 
         print("\n\n\nMODE: ")
-        print(mode)
+        print(self.mode)
         print("\n\n\n\n")
-        if mode == 0: # modality='al'
+        if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
-        elif mode == 1: # modality='no'
+        elif self.mode == 1: # modality='no'
             x_orig = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
             norm = torch.sqrt(torch.sum(x_orig * x_orig, dim=1).unsqueeze(1) ).expand_as(x_orig)
             x_out = x_orig / torch.clamp(norm, min=1e-6)
-        elif mode == 2: # modality='ro'
+        elif self.mode == 2: # modality='ro'
             x_orig = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
             x_out = torch.mean(x_orig, dim=1).unsqueeze(1)
-        elif mode == 3:
+        elif self.mode == 3:
             x_out = F.softmax(x_orig, dim=1)
-        elif mode == 4: # modality='de'
+        elif self.mode == 4: # modality='de'
             x_orig = torch.mean(x_orig, dim=1).unsqueeze(1)
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1) # -> [-1, 1]
         # elif self.mode == 5: # clip to 0., inf
