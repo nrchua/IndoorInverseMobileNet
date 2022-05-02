@@ -219,7 +219,7 @@ class LRASPP(nn.Module):
         
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
-    def forward(self, s2, s4, final, input_dict_extra=None):
+    def forward(self, s2, s4, final, im, input_dict_extra=None):
 
         print("\n\n\nINITIAL:")
         print(final.size())
@@ -244,27 +244,27 @@ class LRASPP(nn.Module):
         print(aspp.size())
 
         y = self.conv_up1(aspp)
+        y = F.interpolate(y, size=s4.shape[2:], mode='bilinear', align_corners=False)
+        dx1 = y
 
         print("\n\n\nCONVUP1:")
         print(y.size())
-        
-        #y = self.conv_up1(final)
-
-        y = F.interpolate(y, size=s4.shape[2:], mode='bilinear', align_corners=False)
-        dx1 = y
 
         y = torch.cat([y, self.convs4(s4)], 1)
         y = self.conv_up2(y)
         y = F.interpolate(y, size=s2.shape[2:], mode='bilinear', align_corners=False)
         dx2 = y
 
-        print("\n\n\nCONVUP12")
+        print("\n\n\nCONVUP2")
         print(final.size())
 
         y = torch.cat([y, self.convs2(s2)], 1)
         y = self.conv_up3(y)
-        y = F.interpolate(y, size=final.shape[2:], mode='bilinear', align_corners=False)
+        y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
+
+        print("\n\n\nCONVUP2")
+        print(final.size())
         
         x_orig = y
 

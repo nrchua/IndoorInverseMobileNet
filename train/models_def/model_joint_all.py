@@ -303,7 +303,7 @@ class Model_Joint(nn.Module):
             if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                 if 'al' in self.cfg.MODEL_BRDF.enable_list:
                     #albedo_output = self.BRDF_Net['albedoDecoder'](input_dict['imBatch'], s2, s4, x)
-                    albedo_output = self.BRDF_Net['albedoDecoder'](s2, s4, x)
+                    albedo_output = self.BRDF_Net['albedoDecoder'](s2, s4, x, input_tensor)
                     albedoPred = 0.5 * (albedo_output['x_out'] + 1)
 
                     if if_has_gt_segBRDF:
@@ -320,19 +320,19 @@ class Model_Joint(nn.Module):
 
                 if 'no' in self.cfg.MODEL_BRDF.enable_list:
                     #normal_output = self.BRDF_Net['normalDecoder'](input_dict['imBatch'], s2, s4, x)
-                    normal_output = self.BRDF_Net['normalDecoder'](s2, s4, x)
+                    normal_output = self.BRDF_Net['normalDecoder'](s2, s4, x, input_tensor)
                     normalPred = normal_output['x_out']
                     return_dict.update({'normalPred': normalPred, 'normal_extra_output_dict': normal_output['extra_output_dict']})
 
                 if 'ro' in self.cfg.MODEL_BRDF.enable_list:
                     #rough_output = self.BRDF_Net['roughDecoder'](input_dict['imBatch'], s2, s4, x)
-                    rough_output = self.BRDF_Net['roughDecoder'](s2, s4, x)
+                    rough_output = self.BRDF_Net['roughDecoder'](s2, s4, x, input_tensor)
                     roughPred = rough_output['x_out']
                     return_dict.update({'roughPred': roughPred, 'rough_extra_output_dict': rough_output['extra_output_dict']})
 
                 if 'de' in self.cfg.MODEL_BRDF.enable_list:
                     #depth_output = self.BRDF_Net['depthDecoder'](input_dict['imBatch'], s2, s4, x)
-                    depth_output = self.BRDF_Net['depthDecoder'](s2, s4, x)
+                    depth_output = self.BRDF_Net['depthDecoder'](s2, s4, x, input_tensor)
                     depthPred = depth_output['x_out']
                     return_dict.update({'depthPred': depthPred})
 
