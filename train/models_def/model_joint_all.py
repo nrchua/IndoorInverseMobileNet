@@ -26,7 +26,7 @@ class Model_Joint(nn.Module):
         self.load_brdf_gt = self.opt.cfg.DATA.load_brdf_gt
         self.model_type = self.opt.model
         #print("\n\n\n\n\n\n\n\n\n\n\n\n\n MODEL TYPE: " + self.model_type + "\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        print("\nMODEL TYPE: " + self.model_type")
+        print("\nMODEL TYPE: " + self.model_type)
         if self.cfg.MODEL_BRDF.enable:
             in_channels = 3
             
