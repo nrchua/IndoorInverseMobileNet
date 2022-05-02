@@ -222,7 +222,7 @@ class LRASPP(nn.Module):
         
         #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
-    def forward(self, s2, s4, final, im, input_dict_extra=None):
+    def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
 
         print("\n\n\nINITIAL:")
         print(final.size())
@@ -275,20 +275,20 @@ class LRASPP(nn.Module):
         
 
         print("\n\n\nMODE: ")
-        print(self.mode)
+        print(mode)
         print("\n\n\n\n")
-        if self.mode == 0: # modality='al'
+        if mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
-        elif self.mode == 1: # modality='no'
+        elif mode == 1: # modality='no'
             x_orig = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
             norm = torch.sqrt(torch.sum(x_orig * x_orig, dim=1).unsqueeze(1) ).expand_as(x_orig)
             x_out = x_orig / torch.clamp(norm, min=1e-6)
-        elif self.mode == 2: # modality='ro'
+        elif mode == 2: # modality='ro'
             x_orig = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
             x_out = torch.mean(x_orig, dim=1).unsqueeze(1)
-        elif self.mode == 3:
+        elif mode == 3:
             x_out = F.softmax(x_orig, dim=1)
-        elif self.mode == 4: # modality='de'
+        elif mode == 4: # modality='de'
             x_orig = torch.mean(x_orig, dim=1).unsqueeze(1)
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1) # -> [-1, 1]
         # elif self.mode == 5: # clip to 0., inf
