@@ -216,7 +216,7 @@ class LRASPP(nn.Module):
                 nn.ReLU(inplace=True),
             )
             self.aspp_conv2 = nn.Sequential(
-                nn.AvgPool2d(kernel_size=(10,10)),
+                nn.AvgPool2d(kernel_size=(10,10)), #changed -- probably change back
                 #nn.AvgPool2d(kernel_size=(49, 49), stride=(16, 20)),
                 nn.Conv2d(high_level_ch, num_filters, 1, bias=False),
                 nn.Sigmoid(),
@@ -232,9 +232,8 @@ class LRASPP(nn.Module):
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
         self.conv_up1 = nn.Conv2d(aspp_out_ch, num_filters, kernel_size=1)
         self.conv_up2 = ConvBnRelu(aspp_out_ch + 64, num_filters, kernel_size=1)
-        self.conv_up3 = ConvBnRelu(aspp_out_ch + 32, self.out_channel_final,  kernel_size=1)
-        
-        #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
+        self.conv_up3 = ConvBnRelu(aspp_out_ch + 32, num_filters,  kernel_size=1)
+        self.last = nn.Conv2d(num_filters, self.out_channel_final, kernel_size=1)
 
     def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
 
@@ -268,7 +267,11 @@ class LRASPP(nn.Module):
         y = self.conv_up3(y)
         y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
+
+
+        y = self.last(dx3)
         
+
         x_orig = y
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}

@@ -226,7 +226,7 @@ _C.MODEL_LIGHT.if_est_log_weight = False
 
 _C.SOLVER = CN()
 _C.SOLVER.method = 'adam'
-_C.SOLVER.lr = 1e-4
+_C.SOLVER.lr = 1e-8#1e-4
 _C.SOLVER.if_warm_up = False
 _C.SOLVER.weight_decay = 0.00001
 _C.SOLVER.max_iter = 10000000
