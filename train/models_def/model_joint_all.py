@@ -36,8 +36,6 @@ class Model_Joint(nn.Module):
                         'encoder': self.encoder_to_use(opt, cascadeLevel = self.opt.cascadeLevel, in_channels = in_channels)
                         })
 
-                print([module for module in self.BRDF_Net['encoder']])
-
                 if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                     if 'al' in self.cfg.MODEL_BRDF.enable_list:
                         self.BRDF_Net.update({'albedoDecoder': self.decoder_to_use(opt, mode=0, modality='al')})
@@ -76,6 +74,11 @@ class Model_Joint(nn.Module):
                     self.BRDF_Net = nn.ModuleDict({
                             'encoder': self.encoder_to_use(opt)
                             })
+                    '''
+                    print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+                    print([module for module in self.BRDF_Net['encoder'].modules()])
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n")
+                    '''
 
                     if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                         if 'al' in self.cfg.MODEL_BRDF.enable_list:
@@ -99,6 +102,11 @@ class Model_Joint(nn.Module):
                     self.BRDF_Net = nn.ModuleDict({
                             'encoder': self.encoder_to_use(opt)
                             })
+                    '''
+                    print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+                    print([module for module in self.BRDF_Net['encoder'].modules()])
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n")
+                    '''
 
                     if self.cfg.MODEL_BRDF.enable_BRDF_decoders:
                         if 'al' in self.cfg.MODEL_BRDF.enable_list:

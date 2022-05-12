@@ -27,11 +27,11 @@ spec:
           requests:
             cpu: "10"
             memory: "20Gi"
-            nvidia.com/gpu: 1
+            nvidia.com/gpu: 0
           limits:
             cpu: "15"
             memory: "25Gi"
-            nvidia.com/gpu: 1
+            nvidia.com/gpu: 0
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm

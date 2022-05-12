@@ -162,6 +162,12 @@ if opt.is_master:
 from models_def.model_joint_all import Model_Joint as the_model
 model = the_model(opt, logger)
 
+'''
+print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+print([module for module in model.modules()])
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n")
+'''
+
 if opt.distributed: # https://github.com/dougsouza/pytorch-sync-batchnorm-example # export NCCL_LL_THRESHOLD=0
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 model.to(opt.device)
