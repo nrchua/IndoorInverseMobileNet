@@ -67,13 +67,15 @@ class Model_Joint(nn.Module):
                 if self.cfg.MODEL_BRDF.if_freeze:
                     self.BRDF_Net.eval()
             else:
-                if self.model_type == "mobilenet-large":
+                if self.model_type == "mobilenet_large":
                     self.encoder_to_use = models_mobilenet.MobileNetV3_Large
                     self.decoder_to_use = models_mobilenet.LRASPP
 
                     self.BRDF_Net = nn.ModuleDict({
                             'encoder': self.encoder_to_use(opt)
                             })
+                    print("MODEL: MobileNet Large")
+
                     '''
                     print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
                     print([module for module in self.BRDF_Net['encoder'].modules()])
@@ -102,6 +104,8 @@ class Model_Joint(nn.Module):
                     self.BRDF_Net = nn.ModuleDict({
                             'encoder': self.encoder_to_use(opt)
                             })
+
+                    print("MODEL: MobileNet Small")
                     '''
                     print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
                     print([module for module in self.BRDF_Net['encoder'].modules()])
