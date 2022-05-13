@@ -39,6 +39,8 @@ spec:
             mountPath: /openroomsindept
           - name: ruidatamclab
             mountPath: /ruidata
+          - name: siggraphasia20dataset
+            mountPath: /siggraphasia20dataset
 
       volumes:
       - name: dshm  # shared memory
@@ -53,6 +55,9 @@ spec:
       - name: nickdata
         persistentVolumeClaim:
             claimName: nickdata
+      - name: siggraphasia20dataset
+        persistentVolumeClaim:
+            claimName: siggraphasia20dataset
       restartPolicy: Never
       affinity:
         nodeAffinity:
