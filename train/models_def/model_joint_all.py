@@ -196,7 +196,7 @@ class Model_Joint(nn.Module):
     def forward_brdf(self, input_dict, input_dict_extra={}, if_has_gt_BRDF=True):
         if_has_gt_BRDF = if_has_gt_BRDF and (not self.opt.cfg.DATASET.if_no_gt_BRDF) and self.load_brdf_gt and not self.opt.cfg.DEBUG.if_test_real
         if_has_gt_segBRDF = if_has_gt_BRDF and not self.opt.cfg.DEBUG.if_nyud and not self.opt.cfg.DEBUG.if_iiw and not self.opt.cfg.DEBUG.if_test_real
-
+        print("INPUT DICT: " + str(input_dict))
         input_list = [input_dict['input_batch_brdf']]
 
         input_tensor = torch.cat(input_list, 1)

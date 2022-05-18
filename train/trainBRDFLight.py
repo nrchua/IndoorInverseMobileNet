@@ -163,6 +163,23 @@ from models_def.model_joint_all import Model_Joint as the_model
 model = the_model(opt, logger)
 
 '''
+print("\n\nMODEL SIZE:\n")
+im_batch = torch.zeros((1,3,240,320)).cuda()
+from fvcore.nn import FlopCountAnalysis
+from detectron2.utils.analysis import FlopCountAnalysis
+flops = FlopCountAnalysis(model, im_batch)
+flops.total()
+
+from fvcore.nn import flop_count_table
+print('---', flop_count_table(flops))
+print("\n\nEND MODEL SIZE\n")
+'''
+
+
+
+
+
+'''
 print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
 print([module for module in model.modules()])
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n")

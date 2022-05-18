@@ -41,6 +41,8 @@ spec:
           mountPath: /nickdata
         - name: ruidatamclab
           mountPath: /ruidata
+        - name: siggraphasia20dataset
+          mountPath: /siggraphasia20dataset
 
       volumes:
       - name: nickdata
@@ -52,6 +54,9 @@ spec:
       - name: ruidatamclab
         persistentVolumeClaim:
             claimName: ruidatamclab
+      - name: siggraphasia20dataset
+        persistentVolumeClaim:
+            claimName: siggraphasia20dataset
       - name: dshm
         emptyDir:
           medium: Memory
