@@ -210,6 +210,10 @@ The current implementation has 3 major differences from the original CVPR20 impl
 * In the new models, we do not use spherical Gaussian parameters generated from optimization for supervision. That is mainly because the optimization proceess is time consuming and we have not finished that process yet. We will update the code once it is done. The performance with spherical Gaussian supervision is expected to be better.
 * The resolution of the second cascade is changed from 480x640 to 240x320. We find that the networks can generate smoother results with smaller resolution.
 * We remove the light source segmentation mask as an input. It does not have a major impact on the final results.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 03bd0b503f7bcb09f5074ee297b95a5f6cb0f1b0
 ## 10. README for new student user
 It is important to have access to the cluster to have GPU resources to run the training on. Please look at the above steps before attempting to modify the code. 
 
@@ -254,6 +258,7 @@ It is important to have access to the cluster to have GPU resources to run the t
 ### c. How to Switch out Zhengqin’s model with Our Lightweight Model for training
 While within the cluster_control directory, the script we use to train:
 ```python your_tool.py create -d --gpus 1 -f your_torch_job_mclab.yaml --memr 25 --meml 40 --cpur 10 --cpul 15 -s 'python -m torch.distributed.launch --master_port 5320 --nproc_per_node=1  trainBRDFLight.py --if_cluster --task_name DATE-mobilenet-small --if_train True --if_val True --if_vis True --eval_every_iter 5000 --if_overfit_train False --model mobilenet_small DATASET.num_workers 9 MODEL_BRDF.enable True MODEL_BRDF.load_pretrained_pth False MODEL_BRDF.enable_BRDF_decoders True MODEL_BRDF.enable_list al_de_no_ro MODEL_BRDF.loss_list al_de_no_ro DATA.data_read_list al_de_no_ro DATA.im_height 240 DATA.im_width 320 train_h 240 train_w 320 opt.cfg.DATASET.tmp False DEBUG.if_dump_perframe_BRDF True SOLVER.ims_per_batch 8 TEST.ims_per_batch 8 DATA.load_brdf_gt True DATA.if_load_png_not_hdr True DATASET.mini False'```
+<<<<<<< HEAD
 Arguments to modify:
 --memr: the minimum memory requested for your job (cluster)
 --meml: the maximum memory requested for your job (cluster)
@@ -268,13 +273,55 @@ MODEL_BRDF.load_pretrained_pth: True to use pretrained weights, False to not. Do
 MODEL_BRDF.enable_list: al, de, no, ro separated by _ to train/test on the desired BRDF modalities (ex: al_de_no_ro)
 ### d. Our model
 * The code for the mobilenet encoder and our decoders can be found in the models_mobilenet_v3.py file.
+=======
+
+Arguments to modify:
+
+--memr: the minimum memory requested for your job (cluster)
+
+--meml: the maximum memory requested for your job (cluster)
+
+--cpur: the minimum number of CPU requested for your job (cluster)
+
+--cpul: the maximum number of CPU requested for your job (cluster)
+
+--task_name: the name of your job
+
+--if_train: True if you want to train the model and False if you want to just test
+
+--if_val: True to test the model on the validation set and False if not
+
+--if_vis: True to visualize the image outputs, False if not
+
+--model: the three possible arguments are li, mobilenet_small, mobilenet_large. By default, it uses the li model. mobilenet_small uses the small encoder as specified in the mobilenet paper and mobilenet_large uses the large encoder as specified in the mobilenet paper
+
+
+MODEL_BRDF.load_pretrained_pth: True to use pretrained weights, False to not. Does not work yet when utilizing either the mobilenet_large or mobilenet_small models.
+
+MODEL_BRDF.enable_list: al, de, no, ro separated by _ to train/test on the desired BRDF modalities (ex: al_de_no_ro)
+
+### d. Our model
+* The code for the mobilenet encoder and our decoders can be found in the models_mobilenet_v3.py file.
+
+>>>>>>> 03bd0b503f7bcb09f5074ee297b95a5f6cb0f1b0
 ### e. How to see the output of your trained model
 * We use tensorboard to see the output of our losses for each modality
 * Make sure you have the job running on your deployment before launching the tensorboard:
   * Within your deployment, do ‘tensorboard --logdir {pathway to logs folder}’
   * Outside your deployment (on your terminal), do ‘kubectl port-forward <the name of your deployment> 6006:6006’ 
   * To get your deployment’s name, do ‘kubectl get pods -ww’ 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 03bd0b503f7bcb09f5074ee297b95a5f6cb0f1b0
 ## 11. Reference 
 [1] Dai, A., Chang, A. X., Savva, M., Halber, M., Funkhouser, T., & Nießner, M. (2017). Scannet: Richly-annotated 3d reconstructions of indoor scenes. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 5828-5839).
 
 [2] Garon, M., Sunkavalli, K., Hadap, S., Carr, N., & Lalonde, J. F. (2019). Fast spatially-varying indoor lighting estimation. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 6908-6917).
+  
+[3] Howard, A., Sandler, M., Chu, G., Chen, L. C., Chen, B., Tan, M., ... & Adam, H. (2019). Searching for mobilenetv3. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 1314-1324).
+
+[4] Li, Z., Shafiei, M., Ramamoorthi, R., Sunkavalli, K., & Chandraker, M. (2020). Inverse rendering for complex indoor scenes: Shape, spatially-varying lighting and svbrdf from a single image. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 2475-2484).
+  
+[5] Sandler, M., Howard, A., Zhu, M., Zhmoginov, A., & Chen, L. C. (2018). Mobilenetv2: Inverted residuals and linear bottlenecks. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 4510-4520).

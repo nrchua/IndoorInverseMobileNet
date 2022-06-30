@@ -1,3 +1,6 @@
+'Created by Nitya Agarwal, Nicholas Chua, Amanda Kristanto, Saarthak Trivedi'
+'References for creation: https://github.com/ekzhang/fastseg and https://github.com/rwightman/gen-efficientnet-pytorch'
+
 """Modified MobileNetV3 for use as semantic segmentation feature extractors."""
 
 import torch
@@ -83,7 +86,7 @@ class MobileNetV3_Large(nn.Module):
         self.block5 = net.blocks[5]
         self.block6 = net.blocks[6]
 
-    def forward(self, x, input_dict_extra=None):
+    def forward(self, x):
         x = self.early(x) # 2x
         x = self.block0(x)
         s2 = x
@@ -94,7 +97,7 @@ class MobileNetV3_Large(nn.Module):
         x = self.block4(x)
         x = self.block5(x)
         x = self.block6(x)
-        return s2, s4, x, {}
+        return s2, s4, x
 
 class MobileNetV3_Small(nn.Module):
     def __init__(self, opt, trunk=tf_mobilenetv3_small_100, pretrained=False):
@@ -133,7 +136,7 @@ class MobileNetV3_Small(nn.Module):
         self.block4 = net.blocks[4]
         self.block5 = net.blocks[5]
 
-    def forward(self, x, input_dict_extra=None):
+    def forward(self, x):
         x = self.early(x) # 2x
         s2 = x
         x = self.block0(x) # 4x
@@ -143,7 +146,7 @@ class MobileNetV3_Small(nn.Module):
         x = self.block3(x)
         x = self.block4(x)
         x = self.block5(x)
-        return s2, s4, x, {}
+        return s2, s4, x
 
 #DECODERS
 class LRASPP(nn.Module):
@@ -159,20 +162,8 @@ class LRASPP(nn.Module):
 
         #self.trunk, s2_ch, s4_ch, high_level_ch = get_trunk(trunk_name=trunk)
         self.use_aspp = use_aspp
-        self.mobilenet_size_large = False
+        self.mobilenet_size_large = True
         self.mode = mode
-
-        out_channel_final = 0
-        if (mode == 0):
-            out_channel_final = 3
-        elif (mode == 1):
-            out_channel_final = 3
-        elif (mode == 2):
-            out_channel_final = 1
-        elif (mode == 4):
-            out_channel_final = 3
-
-        self.out_channel_final = out_channel_final
 
         if (self.mobilenet_size_large):
             s2_ch = 16
@@ -216,29 +207,24 @@ class LRASPP(nn.Module):
                 nn.ReLU(inplace=True),
             )
             self.aspp_conv2 = nn.Sequential(
-                nn.AvgPool2d(kernel_size=(10,10)), #changed -- probably change back
-                #nn.AvgPool2d(kernel_size=(49, 49), stride=(16, 20)),
+                nn.AvgPool2d(kernel_size=(49, 49), stride=(16, 20)),
                 nn.Conv2d(high_level_ch, num_filters, 1, bias=False),
                 nn.Sigmoid(),
             )
             aspp_out_ch = num_filters
-        
-
-        num_layers2 = int(aspp_out_ch/2)
-        num_layers3 = int(aspp_out_ch/4)
-
 
         self.convs2 = nn.Conv2d(s2_ch, 32, kernel_size=1, bias=False)
         self.convs4 = nn.Conv2d(s4_ch, 64, kernel_size=1, bias=False)
         self.conv_up1 = nn.Conv2d(aspp_out_ch, num_filters, kernel_size=1)
-        self.conv_up2 = ConvBnRelu(aspp_out_ch + 64, num_filters, kernel_size=1)
-        self.conv_up3 = ConvBnRelu(aspp_out_ch + 32, num_filters,  kernel_size=1)
-        self.last = nn.Conv2d(num_filters, self.out_channel_final, kernel_size=1)
+        self.conv_up2 = ConvBnRelu(num_filters + 64, num_filters, kernel_size=1)
+        self.conv_up3 = ConvBnRelu(num_filters + 32, num_filters, kernel_size=1)
+        
+        #self.last = nn.Conv2d(num_filters, num_classes, kernel_size=1)
 
-    def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
+    def forward(self, s2, s4, final):
 
         extra_output_dict = {}
-
+        
         if self.use_aspp:
             aspp = torch.cat([
                 self.aspp_conv1(final),
@@ -253,7 +239,7 @@ class LRASPP(nn.Module):
                 mode='bilinear',
                 align_corners=True
             )
-
+        
         y = self.conv_up1(aspp)
         y = F.interpolate(y, size=s4.shape[2:], mode='bilinear', align_corners=False)
         dx1 = y
@@ -265,17 +251,12 @@ class LRASPP(nn.Module):
 
         y = torch.cat([y, self.convs2(s2)], 1)
         y = self.conv_up3(y)
-        y = F.interpolate(y, size=im.shape[2:], mode='bilinear', align_corners=False)
         dx3 = y
-
-
-        y = self.last(dx3)
         
-
-        x_orig = y
+        x_orig = dx3
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
-    
+        
         if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
         elif self.mode == 1: # modality='no'
@@ -298,6 +279,10 @@ class LRASPP(nn.Module):
         #     x_out = 1. / (x_out + 1e-6) # -> [0, inf]
         else:
             x_out = x_orig
+        
+        y = x_out
+        y = F.interpolate(y, size=x.shape[2:], mode='bilinear', align_corners=False)
+        x_out = y
 
         return_dict.update({'x_out': x_out})
 
