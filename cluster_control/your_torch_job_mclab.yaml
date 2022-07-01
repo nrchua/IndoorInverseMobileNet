@@ -55,9 +55,6 @@ spec:
       - name: siggraphasia20dataset
         persistentVolumeClaim:
             claimName: siggraphasia20dataset
-      - name: ruidatamclab
-        persistentVolumeClaim:
-            claimName: ruidatamclab
       - name: nickdata
         persistentVolumeClaim:
             claimName: nickdata
