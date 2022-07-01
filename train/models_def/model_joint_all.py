@@ -359,7 +359,7 @@ class Model_Joint(nn.Module):
 
     def forward_LIGHT_Net(self, input_dict, imBatch, albedoInput, depthInput, normalInput, roughInput, ):
         im_h, im_w = self.cfg.DATA.im_height, self.cfg.DATA.im_width
-        assert self.cfg.DATA.pad_option == 'const'
+        # assert self.cfg.DATA.pad_option == 'const'
 
         # bn, ch, nrow, ncol = albedoInput.size()
         # if not self.cfg.MODEL_LIGHT.use_scale_aware_loss:
