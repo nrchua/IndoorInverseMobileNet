@@ -1,7 +1,5 @@
 """Modified MobileNetV3 for use as semantic segmentation feature extractors."""
 
-#random change
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
