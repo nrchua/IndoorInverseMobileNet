@@ -267,7 +267,7 @@ class decoder0(nn.Module):
 
         x_orig = self.dconvFinal(self.dpadFinal(dx6 ) )
         
-        print("\n\n\n\nMODE: " + str(self.mode) + "\n\n\n\n")
+        #print("\n\n\n\nMODE: " + str(self.mode) + "\n\n\n\n")
 
         if self.mode == 0: # modality='al'
             x_out = torch.clamp(1.01 * torch.tanh(x_orig ), -1, 1)
@@ -293,8 +293,5 @@ class decoder0(nn.Module):
             x_out = x_orig
 
         return_dict.update({'x_out': x_out})
-
-        print("\n\n\n\n OUTPUT:")
-        print(x_out.size())
 
         return return_dict

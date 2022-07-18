@@ -42,7 +42,7 @@ spec:
         - name: ruidatamclab
           mountPath: /ruidata
         - name: siggraphasia20dataset
-            mountPath: /siggraphasia20dataset
+          mountPath: /siggraphasia20dataset
 
       volumes:
       - name: nickdata

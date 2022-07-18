@@ -655,7 +655,7 @@ class Model_Joint(nn.Module):
     def turn_on_names(self, in_names, if_print=True):
         for name, param in self.named_parameters():
             for in_name in in_names:
-            # if 'roi_heads.box.predictor' in name or 'classifier_c' in name:
+            
                 if in_name in name:
                     param.requires_grad = True
                     if if_print:
@@ -664,7 +664,7 @@ class Model_Joint(nn.Module):
     def turn_off_names(self, in_names, exclude_names=[], if_print=True):
         for name, param in self.named_parameters():
             for in_name in in_names:
-            # if 'roi_heads.box.predictor' in name or 'classifier_c' in name:
+                
                 if_not_in_exclude = all([exclude_name not in name for exclude_name in exclude_names]) # any item in exclude_names must not be in the paramater name
                 if in_name in name and if_not_in_exclude:
                     param.requires_grad = False
