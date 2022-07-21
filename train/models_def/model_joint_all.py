@@ -136,7 +136,7 @@ class Model_Joint(nn.Module):
 
         if self.cfg.MODEL_LIGHT.enable:
             self.LIGHT_Net = nn.ModuleDict({})
-            if self.model_type_light = "mobilenet_small":
+            if self.model_type_light == "mobilenet_small":
                 self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Small_Light(opt)})
                 if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
                     def __init__(self, opt, SGNum, mode=0, use_aspp=False, num_filters=128
@@ -152,7 +152,7 @@ class Model_Joint(nn.Module):
                 self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
-            elif self.model_type_light = "mobilenet_large":
+            elif self.model_type_light == "mobilenet_large":
                 if self.model_type_light = "mobilenet_large":
                 self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt)})
                 if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
