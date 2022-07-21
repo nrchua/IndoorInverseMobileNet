@@ -10,6 +10,7 @@ import models_def.models_brdf as models_brdf # basic model
 import models_def.models_light as models_light
 
 import models_def.models_mobilenet_v3 as models_mobilenet #mobilenet models
+import models_def.models_mobilenet_light as models_mobilenet_light
 
 from icecream import ic
 
@@ -25,6 +26,7 @@ class Model_Joint(nn.Module):
 
         self.load_brdf_gt = self.opt.cfg.DATA.load_brdf_gt
         self.model_type = self.opt.model
+        self.model_type_light = self.opt.model_light
         if self.cfg.MODEL_BRDF.enable:
             in_channels = 3
             
@@ -134,19 +136,53 @@ class Model_Joint(nn.Module):
 
         if self.cfg.MODEL_LIGHT.enable:
             self.LIGHT_Net = nn.ModuleDict({})
-            self.LIGHT_Net.update({'lightEncoder':  models_light.encoderLight(cascadeLevel = opt.cascadeLevel, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
-            if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
-                self.LIGHT_Net.update({'axisDecoder':  models_light.decoderLight(mode=0, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
-            if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:
-                self.LIGHT_Net.update({'lambDecoder':  models_light.decoderLight(mode = 1, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
-            if 'weight' in opt.cfg.MODEL_LIGHT.enable_list:
-                self.LIGHT_Net.update({'weightDecoder':  models_light.decoderLight(mode = 2, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
+            if self.model_type_light = "mobilenet_small":
+                self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Small_Light(opt)})
+                if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
+                    def __init__(self, opt, SGNum, mode=0, use_aspp=False, num_filters=128
+                    self.LIGHT_Net.update({'axisDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=0 )})
+                if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'lambDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=1 )})
+                if 'weight' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'weightDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=2 )})
 
-            self.non_learnable_layers['renderLayer'] = models_light.renderingLayer(isCuda = opt.if_cuda, 
-                imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
-                envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
-            self.non_learnable_layers['output2env'] = models_light.output2env(isCuda = opt.if_cuda, 
-                envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
+                self.non_learnable_layers['renderLayer'] = models_mobilenet_light.renderingLayer(isCuda = opt.if_cuda, 
+                    imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
+                self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
+                    
+            elif self.model_type_light = "mobilenet_large":
+                if self.model_type_light = "mobilenet_large":
+                self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt)})
+                if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
+                    def __init__(self, opt, SGNum, mode=0, use_aspp=False, num_filters=128
+                    self.LIGHT_Net.update({'axisDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=0 )})
+                if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'lambDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=1 )})
+                if 'weight' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'weightDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=2 )})
+
+                self.non_learnable_layers['renderLayer'] = models_mobilenet_light.renderingLayer(isCuda = opt.if_cuda, 
+                    imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
+                self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
+
+            else:
+                self.LIGHT_Net.update({'lightEncoder':  models_light.encoderLight(cascadeLevel = opt.cascadeLevel, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
+                if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'axisDecoder':  models_light.decoderLight(mode=0, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
+                if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'lambDecoder':  models_light.decoderLight(mode = 1, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
+                if 'weight' in opt.cfg.MODEL_LIGHT.enable_list:
+                    self.LIGHT_Net.update({'weightDecoder':  models_light.decoderLight(mode = 2, SGNum = opt.cfg.MODEL_LIGHT.SGNum )})
+
+                self.non_learnable_layers['renderLayer'] = models_light.renderingLayer(isCuda = opt.if_cuda, 
+                    imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
+                self.non_learnable_layers['output2env'] = models_light.output2env(isCuda = opt.if_cuda, 
+                    envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
             if self.cfg.MODEL_LIGHT.freeze_BRDF_Net:
                 self.turn_off_names(['BRDF_Net'])
@@ -664,7 +700,7 @@ class Model_Joint(nn.Module):
     def turn_off_names(self, in_names, exclude_names=[], if_print=True):
         for name, param in self.named_parameters():
             for in_name in in_names:
-                
+
                 if_not_in_exclude = all([exclude_name not in name for exclude_name in exclude_names]) # any item in exclude_names must not be in the paramater name
                 if in_name in name and if_not_in_exclude:
                     param.requires_grad = False
