@@ -151,7 +151,7 @@ class Model_Joint(nn.Module):
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
                 self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
-                    
+
             elif self.model_type_light = "mobilenet_large":
                 if self.model_type_light = "mobilenet_large":
                 self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt)})
@@ -430,6 +430,7 @@ class Model_Joint(nn.Module):
 
         # Prediction
         if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+            print("inside\n\n\n\n\n\n\n\n\n\n")
             axisPred_ori = self.LIGHT_Net['axisDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 3, 120, 160])
         else:
             axisPred_ori = input_dict['sg_axis_Batch'] # (4, 120, 160, 12, 3)
