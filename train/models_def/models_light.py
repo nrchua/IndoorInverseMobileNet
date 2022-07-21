@@ -68,7 +68,7 @@ class encoderLight(nn.Module ):
         x5 = F.relu(self.gn5(self.conv5(self.pad5(x4) ) ), True)
         x6 = F.relu(self.gn6(self.conv6(self.pad6(x5) ) ), True)
 
-        print(x6.shape)
+        #print(x6.shape)
 
         return x1, x2, x3, x4, x5, x6
 

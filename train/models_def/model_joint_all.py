@@ -427,7 +427,6 @@ class Model_Joint(nn.Module):
 
         # Prediction
         if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
-            print("inside\n\n\n\n\n\n\n\n\n\n")
             axisPred_ori = self.LIGHT_Net['axisDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 3, 120, 160])
         else:
             axisPred_ori = input_dict['sg_axis_Batch'] # (4, 120, 160, 12, 3)
