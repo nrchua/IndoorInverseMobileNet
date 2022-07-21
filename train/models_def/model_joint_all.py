@@ -139,7 +139,6 @@ class Model_Joint(nn.Module):
             if self.model_type_light == "mobilenet_small":
                 self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Small_Light(opt)})
                 if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
-                    def __init__(self, opt, SGNum, mode=0, use_aspp=False, num_filters=128
                     self.LIGHT_Net.update({'axisDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=0 )})
                 if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:
                     self.LIGHT_Net.update({'lambDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=1 )})
