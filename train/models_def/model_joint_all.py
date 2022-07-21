@@ -152,7 +152,6 @@ class Model_Joint(nn.Module):
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
             elif self.model_type_light == "mobilenet_large":
-                if self.model_type_light = "mobilenet_large":
                 self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt)})
                 if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
                     def __init__(self, opt, SGNum, mode=0, use_aspp=False, num_filters=128
