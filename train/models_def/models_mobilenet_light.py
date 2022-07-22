@@ -155,7 +155,7 @@ class LRASPP_Light(nn.Module):
             (setting this to True may yield better results, at the cost of latency)
         num_filters -- the number of filters in the segmentation head
         """
-        super(LRASPP, self).__init__()
+        super(LRASPP_Light, self).__init__()
 
         #self.trunk, s2_ch, s4_ch, high_level_ch = get_trunk(trunk_name=trunk)
         self.use_aspp = use_aspp
