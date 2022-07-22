@@ -107,7 +107,7 @@ class MobileNetV3_Small_Light(nn.Module):
         self.earlybn = nn.BatchNorm2d(16)
         self.earlyact = HardSwish()
 
-        self.early = nn.Sequential(earlyconv, earlybn, earlyact) #nn.Sequential(net.conv_stem, net.bn1, net.act1)
+        self.early = nn.Sequential(self.earlyconv, self.earlybn, self.earlyact) #nn.Sequential(net.conv_stem, net.bn1, net.act1)
         
 
         net.blocks[2][0].conv_dw.stride = (1, 1)
@@ -140,7 +140,7 @@ class MobileNetV3_Small_Light(nn.Module):
         self.block5 = net.blocks[5]
 
     def forward(self, x, input_dict_extra=None):
-        #x = self.early(x) # 2x
+        x = self.early(x) # 2x
         s2 = x
         x = self.block0(x) # 4x
         s4 = x
