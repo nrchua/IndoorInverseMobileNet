@@ -148,7 +148,7 @@ class Model_Joint(nn.Module):
                 self.non_learnable_layers['renderLayer'] = models_mobilenet_light.renderingLayer(isCuda = opt.if_cuda, 
                     imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
-                self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
+                self.non_learnable_layers['output2env'] = models_mobilenet_light.output2env(isCuda = opt.if_cuda, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
             elif self.model_type_light == "mobilenet_large":
@@ -163,7 +163,7 @@ class Model_Joint(nn.Module):
                 self.non_learnable_layers['renderLayer'] = models_mobilenet_light.renderingLayer(isCuda = opt.if_cuda, 
                     imWidth=opt.cfg.MODEL_LIGHT.envCol, imHeight=opt.cfg.MODEL_LIGHT.envRow, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight)
-                self.non_learnable_layers['output2env'] = models_mobilenet_lightt.output2env(isCuda = opt.if_cuda, 
+                self.non_learnable_layers['output2env'] = models_mobilenet_light.output2env(isCuda = opt.if_cuda, 
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
             else:
