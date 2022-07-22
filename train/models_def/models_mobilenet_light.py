@@ -281,6 +281,7 @@ class LRASPP_Light(nn.Module):
         
 
         x_orig = y
+        x_out = y
 
         return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
     
