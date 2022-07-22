@@ -416,38 +416,61 @@ class Model_Joint(nn.Module):
 
         input_batch = torch.cat([imBatchLarge, albedoInputLarge, normalInputLarge, roughInputLarge, depthInputLarge ], dim=1 )
 
-        if self.opt.cascadeLevel == 0:
-            # print(input_batch.shape)
-            x1, x2, x3, x4, x5, x6 = self.LIGHT_Net['lightEncoder'](input_batch.detach() )
-        else:
-            assert self.opt.cascadeLevel > 0
-            x1, x2, x3, x4, x5, x6 = self.LIGHT_Net['lightEncoder'](input_batch.detach(), input_dict['envmapsPreBatch'].detach() )
+        if self.model_type_light == "li":
+            if self.opt.cascadeLevel == 0:
+                # print(input_batch.shape)
+                x1, x2, x3, x4, x5, x6 = self.LIGHT_Net['lightEncoder'](input_batch.detach() )
+            else:
+                assert self.opt.cascadeLevel > 0
+                x1, x2, x3, x4, x5, x6 = self.LIGHT_Net['lightEncoder'](input_batch.detach(), input_dict['envmapsPreBatch'].detach() )
 
-        # print(input_batch.shape, x1.shape, x2.shape, x3.shape, x4.shape, x5.shape, x6.shape) # torch.Size([4, 11, 480, 640]) torch.Size([4, 128, 60, 80]) torch.Size([4, 256, 30, 40]) torch.Size([4, 256, 15, 20]) torch.Size([4, 512, 7, 10]) torch.Size([4, 512, 3, 5]) torch.Size([4, 1024, 3, 5])
+            # print(input_batch.shape, x1.shape, x2.shape, x3.shape, x4.shape, x5.shape, x6.shape) # torch.Size([4, 11, 480, 640]) torch.Size([4, 128, 60, 80]) torch.Size([4, 256, 30, 40]) torch.Size([4, 256, 15, 20]) torch.Size([4, 512, 7, 10]) torch.Size([4, 512, 3, 5]) torch.Size([4, 1024, 3, 5])
 
-        # Prediction
-        if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
-            axisPred_ori = self.LIGHT_Net['axisDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 3, 120, 160])
-        else:
-            axisPred_ori = input_dict['sg_axis_Batch'] # (4, 120, 160, 12, 3)
-            axisPred_ori = axisPred_ori.permute(0, 3, 4, 1, 2)
-        if 'lamb' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
-            lambPred_ori = self.LIGHT_Net['lambDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 120, 160])
-        else:
-            lambPred_ori = input_dict['sg_lamb_Batch'] # (4, 120, 160, 12, 1)
-            lambPred_ori = lambPred_ori.squeeze(4).permute(0, 3, 1, 2)
+            # Prediction
+            if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                axisPred_ori = self.LIGHT_Net['axisDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 3, 120, 160])
+            else:
+                axisPred_ori = input_dict['sg_axis_Batch'] # (4, 120, 160, 12, 3)
+                axisPred_ori = axisPred_ori.permute(0, 3, 4, 1, 2)
+            if 'lamb' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                lambPred_ori = self.LIGHT_Net['lambDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 12, 120, 160])
+            else:
+                lambPred_ori = input_dict['sg_lamb_Batch'] # (4, 120, 160, 12, 1)
+                lambPred_ori = lambPred_ori.squeeze(4).permute(0, 3, 1, 2)
 
-        if 'weight' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
-            weightPred_ori = self.LIGHT_Net['weightDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 36, 120, 160])
-        else:
-            weightPred_ori = input_dict['sg_weight_Batch'] # (4, 120, 160, 12, 3)
-            weightPred_ori = weightPred_ori.flatten(3).permute(0, 3, 1, 2)
-            # weightPred_ori = torch.ones_like(weightPred_ori).cuda() * 0.1
-            # weightPred_ori[weightPred_ori>500] = 500.
-            # weightPred_ori = weightPred_ori / 500.
-        # print(torch.max(weightPred_ori), torch.min(weightPred_ori), torch.median(weightPred_ori))
+            if 'weight' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                weightPred_ori = self.LIGHT_Net['weightDecoder'](x1, x2, x3, x4, x5, x6) # torch.Size([4, 36, 120, 160])
+            else:
+                weightPred_ori = input_dict['sg_weight_Batch'] # (4, 120, 160, 12, 3)
+                weightPred_ori = weightPred_ori.flatten(3).permute(0, 3, 1, 2)
+                # weightPred_ori = torch.ones_like(weightPred_ori).cuda() * 0.1
+                # weightPred_ori[weightPred_ori>500] = 500.
+                # weightPred_ori = weightPred_ori / 500.
+            # print(torch.max(weightPred_ori), torch.min(weightPred_ori), torch.median(weightPred_ori))
 
-        # print(axisPred_ori.shape, lambPred_ori.shape, weightPred_ori.shape)
+            # print(axisPred_ori.shape, lambPred_ori.shape, weightPred_ori.shape)
+        else:
+            s2, s4, x, _ = self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
+
+            #Prediction
+            if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                axisPred_ori = self.LIGHT_Net['axisDecoder'](s2, s4, x, input_batch.detach())
+            else:
+                axisPred_ori = input_dict['sg_axis_Batch'] # (4, 120, 160, 12, 3)
+                axisPred_ori = axisPred_ori.permute(0, 3, 4, 1, 2)
+
+            if 'lamb' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                lambPred_ori = self.LIGHT_Net['lambDecoder'](s2, s4, x, input_batch.detach()) # torch.Size([4, 12, 120, 160])
+            else:
+                lambPred_ori = input_dict['sg_lamb_Batch'] # (4, 120, 160, 12, 1)
+                lambPred_ori = lambPred_ori.squeeze(4).permute(0, 3, 1, 2)
+            
+            if 'weight' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
+                weightPred_ori = self.LIGHT_Net['weightDecoder'](s2, s4, x, input_batch.detach()) # torch.Size([4, 36, 120, 160])
+            else:
+                weightPred_ori = input_dict['sg_weight_Batch'] # (4, 120, 160, 12, 3)
+                weightPred_ori = weightPred_ori.flatten(3).permute(0, 3, 1, 2)
+            
         return axisPred_ori, lambPred_ori, weightPred_ori
 
 
