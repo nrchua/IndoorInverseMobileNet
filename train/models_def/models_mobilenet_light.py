@@ -297,7 +297,7 @@ class LRASPP_Light(nn.Module):
 
         return_dict.update({'x_out': x_out})
 
-        return return_dict
+        return x_out
 
 class output2env():
     def __init__(self, SGNum, envWidth = 16, envHeight = 8, isCuda = True ):
@@ -344,7 +344,6 @@ class output2env():
         return envmaps
 
     def output2env(self, axisOrig, lambOrig, weightOrig, if_postprocessing=True):
-        print(type(weightOrig), "~~~~~~~~~~~~")
         bn, _, envRow, envCol = weightOrig.size()
 
         axis = axisOrig # torch.Size([B, 12(SGNum), 3, 120, 160])
