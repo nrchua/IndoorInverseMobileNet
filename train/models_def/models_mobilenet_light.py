@@ -140,7 +140,6 @@ class MobileNetV3_Small_Light(nn.Module):
         self.block5 = net.blocks[5]
 
     def forward(self, x, input_dict_extra=None):
-        print(x.size())
         x = self.early(x) # 2x
         s2 = x
         x = self.block0(x) # 4x
@@ -345,6 +344,7 @@ class output2env():
         return envmaps
 
     def output2env(self, axisOrig, lambOrig, weightOrig, if_postprocessing=True):
+        print(weightOrig)
         bn, _, envRow, envCol = weightOrig.size()
 
         axis = axisOrig # torch.Size([B, 12(SGNum), 3, 120, 160])
