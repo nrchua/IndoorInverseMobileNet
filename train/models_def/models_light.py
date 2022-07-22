@@ -192,7 +192,7 @@ class output2env():
         return envmaps
 
     def output2env(self, axisOrig, lambOrig, weightOrig, if_postprocessing=True):
-        print(weightOrig)
+        print(type(weightOrig) + "~~~~~~~~~~~~")
         bn, _, envRow, envCol = weightOrig.size()
 
         axis = axisOrig # torch.Size([B, 12(SGNum), 3, 120, 160])
