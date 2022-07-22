@@ -103,7 +103,7 @@ class MobileNetV3_Small_Light(nn.Module):
         net = trunk(pretrained=pretrained,
                     norm_layer=nn.BatchNorm2d)
 
-        self.earlyconv = nn.Conv2d(in_channels, 16, 3, 2)
+        self.earlyconv = nn.Conv2d(in_channels, 16, 1, 2)
         self.earlybn = nn.BatchNorm2d(16)
         self.earlyact = HardSwish()
 
@@ -295,7 +295,7 @@ class LRASPP_Light(nn.Module):
         else:
             x_out = x_orig
 
-        return_dict.update({'x_out': x_out})
+        #return_dict.update({'x_out': x_out})
 
         return x_out
 
