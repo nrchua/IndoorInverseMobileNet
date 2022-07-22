@@ -43,9 +43,62 @@ class ConvBnRelu(nn.Module):
         x = self.relu(x)
         return x
 
+#ENCODERS
+class MobileNetV3_Large_Light(nn.Module):
+    """Modified MobileNetV3 for use as semantic segmentation feature extractors."""
+    def __init__(self, opt, trunk=tf_mobilenetv3_large_100, pretrained=False):
+        super(MobileNetV3_Large_Light, self).__init__()
+        net = trunk(pretrained=pretrained,
+                    norm_layer=nn.BatchNorm2d)
+
+        self.early = nn.Sequential(net.conv_stem, net.bn1, net.act1)
+
+        net.blocks[3][0].conv_dw.stride = (1, 1)
+        net.blocks[5][0].conv_dw.stride = (1, 1)
+
+        for block_num in (3, 4, 5, 6):
+            for sub_block in range(len(net.blocks[block_num])):
+                sb = net.blocks[block_num][sub_block]
+                if isinstance(sb, InvertedResidual):
+                    m = sb.conv_dw
+                else:
+                    m = sb.conv
+                if block_num < 5:
+                    m.dilation = (2, 2)
+                    pad = 2
+                else:
+                    m.dilation = (4, 4)
+                    pad = 4
+                # Adjust padding if necessary, but NOT for "same" layers
+                assert m.kernel_size[0] == m.kernel_size[1]
+                if not isinstance(m, Conv2dSame) and not isinstance(m, Conv2dSameExport):
+                    pad *= (m.kernel_size[0] - 1) // 2
+                    m.padding = (pad, pad)
+
+        self.block0 = net.blocks[0]
+        self.block1 = net.blocks[1]
+        self.block2 = net.blocks[2]
+        self.block3 = net.blocks[3]
+        self.block4 = net.blocks[4]
+        self.block5 = net.blocks[5]
+        self.block6 = net.blocks[6]
+
+    def forward(self, x, input_dict_extra=None):
+        x = self.early(x) # 2x
+        x = self.block0(x)
+        s2 = x
+        x = self.block1(x) # 4x
+        s4 = x
+        x = self.block2(x) # 8x
+        x = self.block3(x)
+        x = self.block4(x)
+        x = self.block5(x)
+        x = self.block6(x)
+        return s2, s4, x, {}
+
 class MobileNetV3_Small_Light(nn.Module):
     def __init__(self, opt, trunk=tf_mobilenetv3_small_100, pretrained=False):
-        super(MobileNetV3_Small, self).__init__()
+        super(MobileNetV3_Small_Light, self).__init__()
         net = trunk(pretrained=pretrained,
                     norm_layer=nn.BatchNorm2d)
 
@@ -184,7 +237,7 @@ class LRASPP_Light(nn.Module):
         self.dpadFinal = nn.ReplicationPad2d(1)
         self.last = nn.Conv2d(num_filters, self.out_channel_final, kernel_size=1)
 
-    def forward(self, s2, s4, final, im, mode, input_dict_extra=None):
+    def forward(self, s2, s4, final, im, input_dict_extra=None):
 
         extra_output_dict = {}
 
