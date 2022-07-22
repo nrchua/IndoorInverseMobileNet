@@ -450,7 +450,7 @@ class Model_Joint(nn.Module):
 
             # print(axisPred_ori.shape, lambPred_ori.shape, weightPred_ori.shape)
         else:
-            s2, s4, x, _ = self.BRDF_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
+            s2, s4, x, _ = self.LIGHT_Net['encoder'](input_tensor, input_dict_extra=input_dict_extra)
 
             #Prediction
             if 'axis' in self.cfg.MODEL_LIGHT.enable_list and not self.cfg.MODEL_LIGHT.use_GT_light_sg:
