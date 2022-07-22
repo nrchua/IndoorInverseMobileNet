@@ -51,7 +51,6 @@ class encoderLight(nn.Module ):
         self.gn6 = nn.GroupNorm(num_groups=64, num_channels=1024)
 
     def forward(self, input_batch, envs = None):
-        print(input_batch.size())
         input1 = self.preProcess(input_batch )
         # print(input_batch.shape, input1.shape)
         input2 = envs

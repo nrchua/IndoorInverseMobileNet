@@ -140,6 +140,7 @@ class MobileNetV3_Small_Light(nn.Module):
         self.block5 = net.blocks[5]
 
     def forward(self, x, input_dict_extra=None):
+        print(x.size())
         x = self.early(x) # 2x
         s2 = x
         x = self.block0(x) # 4x
