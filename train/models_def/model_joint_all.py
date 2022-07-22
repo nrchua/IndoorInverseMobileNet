@@ -152,7 +152,7 @@ class Model_Joint(nn.Module):
                     envWidth = opt.cfg.MODEL_LIGHT.envWidth, envHeight = opt.cfg.MODEL_LIGHT.envHeight, SGNum = opt.cfg.MODEL_LIGHT.SGNum )
 
             elif self.model_type_light == "mobilenet_large":
-                self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt)})
+                self.LIGHT_Net.update({'lightEncoder':  models_mobilenet_light.MobileNetV3_Large_Light(opt, 11)})
                 if 'axis' in opt.cfg.MODEL_LIGHT.enable_list:
                     self.LIGHT_Net.update({'axisDecoder':  models_mobilenet_light.LRASPP_Light(opt, SGNum = opt.cfg.MODEL_LIGHT.SGNum, mode=0 )})
                 if 'lamb' in opt.cfg.MODEL_LIGHT.enable_list:

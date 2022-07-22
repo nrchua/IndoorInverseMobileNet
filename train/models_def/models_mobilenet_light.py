@@ -6,6 +6,7 @@ import numpy as np
 
 from geffnet import tf_mobilenetv3_large_100, tf_mobilenetv3_small_100
 from geffnet.efficientnet_builder import InvertedResidual, Conv2dSame, Conv2dSameExport
+from geffnet.activations import HardSwish
 
 #UTILITY FUNCTIONS/CLASSES
 def get_trunk(trunk_name):
@@ -97,12 +98,17 @@ class MobileNetV3_Large_Light(nn.Module):
         return s2, s4, x, {}
 
 class MobileNetV3_Small_Light(nn.Module):
-    def __init__(self, opt, trunk=tf_mobilenetv3_small_100, pretrained=False):
+    def __init__(self, opt, in_channels, trunk=tf_mobilenetv3_small_100, pretrained=False):
         super(MobileNetV3_Small_Light, self).__init__()
         net = trunk(pretrained=pretrained,
                     norm_layer=nn.BatchNorm2d)
 
-        #self.early = nn.Sequential(net.conv_stem, net.bn1, net.act1)
+        self.earlyconv = nn.Conv2d(in_channels, 16, 3, 2)
+        self.earlybn = nn.BatchNorm2d(16)
+        self.earlyact = HardSwish()
+
+        self.early = nn.Sequential(earlyconv, earlybn, earlyact) #nn.Sequential(net.conv_stem, net.bn1, net.act1)
+        
 
         net.blocks[2][0].conv_dw.stride = (1, 1)
         net.blocks[4][0].conv_dw.stride = (1, 1)
