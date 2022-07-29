@@ -43,11 +43,16 @@ spec:
           mountPath: /ruidata
         - name: siggraphasia20dataset
           mountPath: /siggraphasia20dataset
+        - name: saarthakdata
+          mountPath: /saarthakdata
 
       volumes:
       - name: nickdata
         persistentVolumeClaim:
             claimName: nickdata
+      - name: saarthakdata
+        persistentVolumeClaim:
+            claimName: saarthakdata
       - name: openroomsindepthaosu
         persistentVolumeClaim:
             claimName: openroomsindepthaosu 

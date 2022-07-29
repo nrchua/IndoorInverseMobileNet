@@ -283,7 +283,7 @@ class LRASPP_Light(nn.Module):
         x_orig = y
         x_out = y
 
-        return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
+        #return_dict = {'extra_output_dict': extra_output_dict, 'dx1': dx1, 'dx2': dx2, 'dx3': dx3}
     
         if self.mode == 1 or self.mode == 2:
             x_out = 0.5 * (x_out + 1)

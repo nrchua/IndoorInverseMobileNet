@@ -115,7 +115,7 @@ parser.add_argument('--cooldown-epochs', type=int, default=10, metavar='N',
 parser.add_argument('--decay-rate', '--dr', type=float, default=0.1, metavar='RATE',
                     help='LR decay rate (default: 0.1)')
 parser.add_argument('--model', type=str, default="li",
-                    help='Model type (li, mobilenet_large, mobilenet_small)')
+                    help='Model type BRDF (li, mobilenet_large, mobilenet_small)')
 parser.add_argument('--model_light', type=str, default="li",
                     help='Model type for lighting (li, mobilenet_large, mobilenet_small)')
 
