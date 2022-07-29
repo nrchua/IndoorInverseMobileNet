@@ -323,6 +323,7 @@ class output2env():
         self.ls.requires_grad = False
 
     def fromSGtoIm(self, axis, lamb, weight ):
+        torch.cuda.empty_cache()
         bn = axis.size(0)
         envRow, envCol = weight.size(2), weight.size(3)
 
