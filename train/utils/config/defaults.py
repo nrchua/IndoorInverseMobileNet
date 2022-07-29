@@ -37,13 +37,13 @@ _C.PATH.matcls_matIdG1_path = 'data/openrooms/matIdGlobal1.txt'
 _C.PATH.matcls_matIdG2_path = 'data/openrooms/matIdGlobal2.txt'
 _C.PATH.torch_home_path = ''
 _C.PATH.torch_home_local = '/home/ruizhu/Documents/Projects/indoorInverse/'
-_C.PATH.torch_home_cluster = ['/nickdata/indoorInverse/']
+_C.PATH.torch_home_cluster = ['/saarthakdata/indoorInverse/']
 _C.PATH.pretrained_path = ''
 _C.PATH.pretrained_local = '/home/ruizhu/Documents/Projects/semanticInverse/pretrained'
-_C.PATH.pretrained_cluster = ['/nickdata/indoorInverse/pretrained']
+_C.PATH.pretrained_cluster = ['/saarthakdata/indoorInverse/pretrained']
 _C.PATH.models_ckpt_path = ''
 _C.PATH.models_ckpt_local = '/home/ruizhu/Documents/Projects/semanticInverse/models_ckpt'
-_C.PATH.models_ckpt_cluster = ['/nickdata/indoorInverse/models_ckpt', '', '']
+_C.PATH.models_ckpt_cluster = ['/saarthakdata/indoorInverse/models_ckpt', '', '']
 
 # ===== debug
 

@@ -227,7 +227,7 @@ def set_up_folders(opt):
     # >>>> SUMMARY WRITERS
     if opt.if_cluster:
         if opt.cluster == 'kubectl':
-            opt.home_path = Path('/nickdata/indoorInverse/') 
+            opt.home_path = Path('/saarthakdata/indoorInverse/') 
         elif opt.cluster == 'nvidia':
             opt.home_path = Path('/home/ruzhu/Documents/Projects/')
         elif opt.cluster == 'ngc':
