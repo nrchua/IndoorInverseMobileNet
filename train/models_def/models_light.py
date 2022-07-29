@@ -51,7 +51,6 @@ class encoderLight(nn.Module ):
         self.gn6 = nn.GroupNorm(num_groups=64, num_channels=1024)
 
     def forward(self, input_batch, envs = None):
-
         input1 = self.preProcess(input_batch )
         # print(input_batch.shape, input1.shape)
         input2 = envs
@@ -67,6 +66,8 @@ class encoderLight(nn.Module ):
         x4 = F.relu(self.gn4(self.conv4(self.pad4(x3) ) ), True)
         x5 = F.relu(self.gn5(self.conv5(self.pad5(x4) ) ), True)
         x6 = F.relu(self.gn6(self.conv6(self.pad6(x5) ) ), True)
+
+        #print(x6.shape)
 
         return x1, x2, x3, x4, x5, x6
 

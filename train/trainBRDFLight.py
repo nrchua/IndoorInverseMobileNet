@@ -114,8 +114,10 @@ parser.add_argument('--cooldown-epochs', type=int, default=10, metavar='N',
                     help='epochs to cooldown LR at min_lr, after cyclic schedule ends')
 parser.add_argument('--decay-rate', '--dr', type=float, default=0.1, metavar='RATE',
                     help='LR decay rate (default: 0.1)')
-parser.add_argument('--model', type=str, default="mobilnet_large",
+parser.add_argument('--model', type=str, default="li",
                     help='Model type (li, mobilenet_large, mobilenet_small)')
+parser.add_argument('--model_light', type=str, default="li",
+                    help='Model type for lighting (li, mobilenet_large, mobilenet_small)')
 
 
 parser.add_argument(
@@ -141,7 +143,8 @@ opt.cfg = cfg
 opt.pwdpath = pwdpath
 opt.if_plotted = False
 
-print("\n\n\n\n\nMODEL: " + opt.model + "\n\n\n\n\n\n\n\n")
+print("\nMODEL BRDF: " + opt.model)
+print("\nMODEL LIGHT: " + opt.model_light)
 
 from utils.utils_envs import set_up_dist
 handle = set_up_dist(opt)
@@ -161,12 +164,6 @@ if opt.is_master:
 # build model
 from models_def.model_joint_all import Model_Joint as the_model
 model = the_model(opt, logger)
-
-'''
-print("\n\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
-print([module for module in model.modules()])
-print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n")
-'''
 
 if opt.distributed: # https://github.com/dougsouza/pytorch-sync-batchnorm-example # export NCCL_LL_THRESHOLD=0
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
