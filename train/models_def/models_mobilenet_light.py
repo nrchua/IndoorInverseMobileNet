@@ -331,8 +331,7 @@ class output2env():
 
         weight = weight.view(bn, self.SGNum, 3, envRow, envCol, 1, 1)
         lamb = lamb.view(bn, self.SGNum, 1, envRow, envCol, 1, 1)
-        print(torch.cuda.memory_allocated())
-        print(torch.cuda.max_memory_allocated())
+        print(torch.cuda.memory_allocated()/torch.cuda.max_memory_allocated())
         mi = lamb.expand([bn, self.SGNum, 1, envRow, envCol, self.envHeight, self.envWidth] )* \
                 (torch.sum(axis.expand([bn, self.SGNum, 3, envRow, envCol, self.envHeight, self.envWidth]) * \
                 self.ls.expand([bn, self.SGNum, 3, envRow, envCol, self.envHeight, self.envWidth] ), dim = 2).unsqueeze(2) - 1)
