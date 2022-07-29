@@ -1,4 +1,3 @@
-import gc
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -324,8 +323,6 @@ class output2env():
         self.ls.requires_grad = False
 
     def fromSGtoIm(self, axis, lamb, weight ):
-        gc.collect()
-        torch.cuda.empty_cache()
         bn = axis.size(0)
         envRow, envCol = weight.size(2), weight.size(3)
 
@@ -334,7 +331,8 @@ class output2env():
 
         weight = weight.view(bn, self.SGNum, 3, envRow, envCol, 1, 1)
         lamb = lamb.view(bn, self.SGNum, 1, envRow, envCol, 1, 1)
-
+        print(torch.cuda.memory_allocated())
+        print(torch.cuda.max_memory_allocated())
         mi = lamb.expand([bn, self.SGNum, 1, envRow, envCol, self.envHeight, self.envWidth] )* \
                 (torch.sum(axis.expand([bn, self.SGNum, 3, envRow, envCol, self.envHeight, self.envWidth]) * \
                 self.ls.expand([bn, self.SGNum, 3, envRow, envCol, self.envHeight, self.envWidth] ), dim = 2).unsqueeze(2) - 1)
