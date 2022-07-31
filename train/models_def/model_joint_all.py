@@ -206,11 +206,13 @@ class Model_Joint(nn.Module):
         return_dict = {}
         input_dict_extra = {}
 
+        print("\nBEGIN DICT\n")
         for key,val in input_dict.items():
             if torch.is_tensor(val):
                 print(key, "  ~~  ", val.size(), "\n")
             else:
                 print(key, "  --  ", val, "\n")
+        print("\nEND DICT\n")
 
         if self.cfg.MODEL_BRDF.enable:
             if self.cfg.MODEL_BRDF.if_freeze:
