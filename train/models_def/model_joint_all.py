@@ -189,7 +189,6 @@ class Model_Joint(nn.Module):
                 self.turn_off_names(['LIGHT_Net'])
                 freeze_bn_in_module(self.LIGHT_Net)
 
-
             if self.cfg.MODEL_LIGHT.load_pretrained_MODEL_LIGHT:
                 self.load_pretrained_MODEL_LIGHT()
 
@@ -206,6 +205,9 @@ class Model_Joint(nn.Module):
     def forward(self, input_dict, if_has_gt_BRDF=True):
         return_dict = {}
         input_dict_extra = {}
+
+        for key,val in input_dict:
+            print(key, "    ", val)
 
         if self.cfg.MODEL_BRDF.enable:
             if self.cfg.MODEL_BRDF.if_freeze:
