@@ -164,6 +164,7 @@ if opt.is_master:
 # build model
 from models_def.model_joint_all import Model_Joint as the_model
 model = the_model(opt, logger)
+model.cuda()
 
 #create test dict
 test_dict = {}
