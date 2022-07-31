@@ -167,28 +167,28 @@ model = the_model(opt, logger)
 
 #create test dict
 test_dict = {}
-test_dict["im_trainval_SDR"] = torch.zeros((2,3,240,320))#.cuda()
-test_dict["im_fixedscale_SDR"] = torch.zeros((2,240,320,3))#.cuda()
+test_dict["im_trainval_SDR"] = torch.zeros((2,3,240,320)).cuda()
+test_dict["im_fixedscale_SDR"] = torch.zeros((2,240,320,3)).cuda()
 test_dict["batch_idx"] = [0,1]
-test_dict["input_batch_brdf"] = torch.zeros((2,3,240,320))#.cuda()
+test_dict["input_batch_brdf"] = torch.zeros((2,3,240,320)).cuda()
 test_dict["pre_batch_dict_brdf"] = {}
 test_dict["im_paths"] = ['/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffLight_xml1/scene0509_00/im_1.hdr', '/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffMat_xml/scene0403_01/im_12.hdr'] 
-test_dict["imBatch"] = torch.zeros((2,3,240,320))#.cuda()
-test_dict["brdf_loss_mask"] = torch.zeros((2,240,320))#.cuda()
-test_dict["pad_mask"] = torch.zeros((2,240,320))#.cuda()
+test_dict["imBatch"] = torch.zeros((2,3,240,320)).cuda()
+test_dict["brdf_loss_mask"] = torch.zeros((2,240,320)).cuda()
+test_dict["pad_mask"] = torch.zeros((2,240,320)).cuda()
 test_dict["frame_info"] = [{}]#[{'index': 0, 'meta_split': 'mainDiffLight_xml1', 'scene_name': 'scene0509_00', 'frame_id': 1, 'frame_key': 'mainDiffLight_xml1-scene0509_00-1', 'png_image_path': PosixPath('/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffLight_xml1/scene0509_00/im_1.png'), 'albedo_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml1/scene0509_00/imbaseColor_1.png', 'normal_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml1/scene0509_00/imnormal_1.png', 'rough_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml1/scene0509_00/imroughness_1.png', 'depth_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml1/scene0509_00/imdepth_1.dat'}, {'index': 1, 'meta_split': 'mainDiffMat_xml', 'scene_name': 'scene0403_01', 'frame_id': 12, 'frame_key': 'mainDiffMat_xml-scene0403_01-12', 'png_image_path': PosixPath('/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffMat_xml/scene0403_01/im_12.png'), 'albedo_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffMat_xml/scene0403_01/imbaseColor_12.png', 'normal_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml/scene0403_01/imnormal_12.png', 'rough_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/mainDiffMat_xml/scene0403_01/imroughness_12.png', 'depth_path': '/siggraphasia20dataset/code/Routine/DatasetCreation/main_xml/scene0403_01/imdepth_12.dat'}] 
-test_dict["albedoBatch"] = torch.zeros((2,3,240,320))#.cuda()
-test_dict["normalBatch"] = torch.zeros((2,3,240,320))#.cuda()
-test_dict["roughBatch"] = torch.zeros((2,1,240,320))#.cuda()
-test_dict["depthBatch"] = torch.zeros((2,1,240,320))#.cuda()
-test_dict["maskBatch"] = torch.zeros((2,3,240,320))#.cuda()
-test_dict["segBRDFBatch"] = torch.zeros((2,1,240,320))#.cuda()
-test_dict["segAllBatch"] = torch.zeros((2,1,240,320))#.cuda()
-test_dict["input_batch_light"] = torch.zeros((2,3,240,320))#.cuda()
+test_dict["albedoBatch"] = torch.zeros((2,3,240,320)).cuda()
+test_dict["normalBatch"] = torch.zeros((2,3,240,320)).cuda()
+test_dict["roughBatch"] = torch.zeros((2,1,240,320)).cuda()
+test_dict["depthBatch"] = torch.zeros((2,1,240,320)).cuda()
+test_dict["maskBatch"] = torch.zeros((2,3,240,320)).cuda()
+test_dict["segBRDFBatch"] = torch.zeros((2,1,240,320)).cuda()
+test_dict["segAllBatch"] = torch.zeros((2,1,240,320)).cuda()
+test_dict["input_batch_light"] = torch.zeros((2,3,240,320)).cuda()
 test_dict["pre_batch_dict_light"] = {}
-test_dict["envmapsBatch"] = torch.zeros((2,3,120,160,8,16))#.cuda()
-test_dict["envmapsIndBatch"] = torch.zeros((2,1,1,1))#.cuda()
-test_dict["hdr_scaleBatch"] = torch.zeros((2))#.cuda()
+test_dict["envmapsBatch"] = torch.zeros((2,3,120,160,8,16)).cuda()
+test_dict["envmapsIndBatch"] = torch.zeros((2,1,1,1)).cuda()
+test_dict["hdr_scaleBatch"] = torch.zeros((2)).cuda()
 
 from fvcore.nn import FlopCountAnalysis
 from detectron2.utils.analysis import FlopCountAnalysis
