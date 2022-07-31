@@ -404,7 +404,7 @@ else:
             
             from fvcore.nn import FlopCountAnalysis
             from detectron2.utils.analysis import FlopCountAnalysis
-            flops = FlopCountAnalysis(model, data_batch)
+            flops = FlopCountAnalysis(model, labels_dict)
             flops.total()
 
             from fvcore.nn import flop_count_table
