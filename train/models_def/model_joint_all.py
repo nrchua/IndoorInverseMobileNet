@@ -206,7 +206,7 @@ class Model_Joint(nn.Module):
         return_dict = {}
         input_dict_extra = {}
 
-        for key,val in input_dict:
+        for key,val in input_dict.items():
             print(key, "    ", val)
 
         if self.cfg.MODEL_BRDF.enable:
