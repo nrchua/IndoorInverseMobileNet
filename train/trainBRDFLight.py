@@ -188,7 +188,7 @@ test_dict["input_batch_light"] = torch.zeros((2,3,240,320)).cuda()
 test_dict["pre_batch_dict_light"] = {}
 test_dict["envmapsBatch"] = torch.zeros((2,3,120,160,8,16)).cuda()
 test_dict["envmapsIndBatch"] = torch.zeros((2,1,1,1)).cuda()
-test_dict["hdr_scaleBatch"] = torch.zeros((2))
+test_dict["hdr_scaleBatch"] = torch.zeros((2)).cuda()
 
 from fvcore.nn import FlopCountAnalysis
 from detectron2.utils.analysis import FlopCountAnalysis
