@@ -401,6 +401,14 @@ else:
 
             # ======= Forward
             optimizer.zero_grad()
+            
+            from fvcore.nn import FlopCountAnalysis
+            from detectron2.utils.analysis import FlopCountAnalysis
+            flops = FlopCountAnalysis(model, data_batch)
+            flops.total()
+
+            from fvcore.nn import flop_count_table
+            print('---', flop_count_table(flops))
             output_dict, loss_dict = forward_joint(True, labels_dict, model, opt, time_meters, tid=tid)
             
             # print('=======loss_dict', loss_dict)
