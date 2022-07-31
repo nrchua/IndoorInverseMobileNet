@@ -348,13 +348,7 @@ else:
         count_samples_this_rank = 0
 
         for i, data_batch in tqdm(enumerate(brdf_loader_train)):
-            from fvcore.nn import FlopCountAnalysis
-            from detectron2.utils.analysis import FlopCountAnalysis
-            flops = FlopCountAnalysis(model, data_batch)
-            flops.total()
-
-            from fvcore.nn import flop_count_table
-            print('---', flop_count_table(flops))
+            
             if cfg.SOLVER.if_test_dataloader:
                 if i % 100 == 0:
                     print(data_batch.keys())
